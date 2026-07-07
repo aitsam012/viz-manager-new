@@ -154,7 +154,7 @@ function AppContent() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      <div className="min-h-screen bg-[#f2f4f0] dark:bg-gray-900 transition-colors">
         {renderCurrentView()}
       </div>
     </ProtectedRoute>
