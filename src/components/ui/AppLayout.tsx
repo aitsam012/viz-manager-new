@@ -6,6 +6,7 @@ import {
   Users,
   ClipboardList,
   FileText,
+  BarChart3,
   LogOut,
   Search,
   Mail,
@@ -18,7 +19,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import RoleBadge from './RoleBadge';
 
-type View = 'dashboard' | 'projects' | 'users' | 'audits' | 'reports';
+type View = 'dashboard' | 'projects' | 'users' | 'audits' | 'reports' | 'stats';
 
 interface AppLayoutProps {
   currentView: View;
@@ -42,6 +43,7 @@ export default function AppLayout({
     { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid },
     { id: 'audits', label: 'Audits', icon: ClipboardList },
     { id: 'reports', label: 'Reports', icon: FileText },
+    { id: 'stats', label: 'Project Stats', icon: BarChart3 },
   ];
 
   if (hasPermission('all', 'create')) {

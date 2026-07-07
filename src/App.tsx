@@ -7,11 +7,13 @@ import ProjectDetail from './components/ProjectDetail';
 import UserManagementDashboard from './components/admin/UserManagementDashboard';
 import AuditManagementDashboard from './components/audit/AuditManagementDashboard';
 import ReportsManagementDashboard from './components/reports/ReportsManagementDashboard';
+import ProjectStatsDashboard from './components/stats/ProjectStatsDashboard';
+import GoogleOAuthCallback from './components/stats/GoogleOAuthCallback';
 import AppLayout from './components/ui/AppLayout';
 import { Project } from './types';
 import { ProjectService } from './services/projectService';
 
-type View = 'dashboard' | 'projects' | 'users' | 'audits' | 'reports';
+type View = 'dashboard' | 'projects' | 'users' | 'audits' | 'reports' | 'stats';
 
 function AppContent() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
@@ -87,6 +89,7 @@ function AppContent() {
       const hash = window.location.hash.slice(1);
       if (hash === 'audits') setCurrentView('audits');
       else if (hash === 'reports') setCurrentView('reports');
+      else if (hash === 'stats') setCurrentView('stats');
     };
 
     window.addEventListener('hashchange', handleHashChange);
@@ -116,6 +119,8 @@ function AppContent() {
         return <AuditManagementDashboard onBack={() => setCurrentView('projects')} />;
       case 'reports':
         return <ReportsManagementDashboard onBack={() => setCurrentView('projects')} />;
+      case 'stats':
+        return <ProjectStatsDashboard projects={projects} />;
       case 'projects':
       case 'dashboard':
       default:
@@ -141,6 +146,9 @@ function AppContent() {
 }
 
 function App() {
+  if (typeof window !== 'undefined' && window.location.pathname === '/oauth/google/callback') {
+    return <GoogleOAuthCallback />;
+  }
   return (
     <AuthProvider>
       <ThemeProvider>

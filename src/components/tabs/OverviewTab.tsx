@@ -6,6 +6,7 @@ import ProgressChart from '../ui/ProgressChart';
 import StatusBadge from '../ui/StatusBadge';
 import EmptyState from '../ui/EmptyState';
 import Tooltip from '../ui/Tooltip';
+import ConnectGoogleCard from '../stats/ConnectGoogleCard';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface OverviewTabProps {
@@ -49,6 +50,9 @@ export default function OverviewTab({ project, onUpdate }: OverviewTabProps) {
 
   return (
     <div className="space-y-8">
+      {/* Google Connection */}
+      <ConnectGoogleCard projectId={project.id} />
+
       {/* Project Summary */}
       <div className="card p-6 animate-fade-in">
         <h2 className={`text-title mb-6 ${
