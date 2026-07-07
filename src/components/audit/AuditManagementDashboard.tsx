@@ -217,96 +217,92 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
         </div>
 
         {/* Search and Filter */}
-        <div className={`rounded-lg shadow-sm border p-4 lg:p-6 mb-6 ${
-          isDarkMode 
-            ? 'bg-gray-800 border-gray-700' 
-            : 'bg-white border-gray-200'
-        }`}>
-          <div className="space-y-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
+        <div className={`rounded-2xl p-4 lg:p-5 mb-6 ${isDarkMode ? 'bg-gray-700/40' : 'bg-gray-50'}`}>
+          <div className="space-y-3">
+            <div className="relative">
+              <Search
+                className={`absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-400'
-                }`} />
-                <input
-                  type="text"
-                  placeholder="Search by website, project, business developer, or auditor..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className={`w-full pl-10 pr-4 py-2 lg:py-3 rounded-lg border transition-colors text-sm lg:text-base ${
-                    isDarkMode 
-                      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500' 
-                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
-                  } focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20`}
-                />
-              </div>
+                }`}
+              />
+              <input
+                type="text"
+                placeholder="Search by website, project, business developer, or auditor..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`w-full pl-11 pr-4 py-2.5 rounded-full text-sm outline-none transition-colors ${
+                  isDarkMode
+                    ? 'bg-gray-800 text-white placeholder-gray-400'
+                    : 'bg-white text-gray-900 placeholder-gray-400 border border-gray-200'
+                }`}
+              />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div>
-                <select
-                  value={filterBD}
-                  onChange={(e) => setFilterBD(e.target.value)}
-                  className={`w-full px-3 py-2 lg:py-3 rounded-lg border transition-colors text-sm lg:text-base ${
-                    isDarkMode 
-                      ? 'bg-gray-700 border-gray-600 text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                >
-                  <option value="all">All BDs</option>
-                  {BUSINESS_DEVELOPERS.map(bd => (
-                    <option key={bd} value={bd}>{bd}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <select
-                  value={filterAuditor}
-                  onChange={(e) => setFilterAuditor(e.target.value)}
-                  className={`w-full px-3 py-2 lg:py-3 rounded-lg border transition-colors text-sm lg:text-base ${
-                    isDarkMode 
-                      ? 'bg-gray-700 border-gray-600 text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                >
-                  <option value="all">All Auditors</option>
-                  {AUDITORS.map(auditor => (
-                    <option key={auditor} value={auditor}>{auditor}</option>
-                  ))}
-                </select>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              <select
+                value={filterBD}
+                onChange={(e) => setFilterBD(e.target.value)}
+                className={`w-full px-4 py-2.5 rounded-full text-sm outline-none transition-colors ${
+                  isDarkMode
+                    ? 'bg-gray-800 text-white border border-gray-700'
+                    : 'bg-white text-gray-900 border border-gray-200'
+                }`}
+              >
+                <option value="all">All BDs</option>
+                {BUSINESS_DEVELOPERS.map((bd) => (
+                  <option key={bd} value={bd}>
+                    {bd}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={filterAuditor}
+                onChange={(e) => setFilterAuditor(e.target.value)}
+                className={`w-full px-4 py-2.5 rounded-full text-sm outline-none transition-colors ${
+                  isDarkMode
+                    ? 'bg-gray-800 text-white border border-gray-700'
+                    : 'bg-white text-gray-900 border border-gray-200'
+                }`}
+              >
+                <option value="all">All Auditors</option>
+                {AUDITORS.map((auditor) => (
+                  <option key={auditor} value={auditor}>
+                    {auditor}
+                  </option>
+                ))}
+              </select>
               <div className="relative">
                 <button
                   onClick={() => setShowDatePicker(!showDatePicker)}
-                  className={`w-full px-4 py-2 lg:py-3 rounded-lg border transition-all duration-200 text-sm lg:text-base shadow-sm hover:shadow-md ${
-                    isDarkMode 
-                      ? 'bg-gray-700 border-gray-600 text-white hover:bg-gray-650 hover:border-gray-500' 
-                      : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50 hover:border-gray-400'
-                  } focus:ring-2 focus:ring-blue-500 focus:border-transparent flex items-center justify-between group`}
+                  className={`w-full px-4 py-2.5 rounded-full text-sm outline-none transition-colors flex items-center justify-between ${
+                    isDarkMode
+                      ? 'bg-gray-800 text-white border border-gray-700 hover:bg-gray-700'
+                      : 'bg-white text-gray-900 border border-gray-200 hover:bg-gray-50'
+                  }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <CalendarDays className={`h-4 w-4 transition-colors ${
-                      dateFilter.preset !== 'all' 
-                        ? 'text-blue-500' 
-                        : isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                    }`} />
-                    <span className={`font-medium ${
-                      dateFilter.preset !== 'all' 
-                        ? 'text-blue-600 dark:text-blue-400' 
-                        : ''
-                    }`}>
+                  <div className="flex items-center gap-2 min-w-0">
+                    <CalendarDays
+                      className={`h-4 w-4 flex-shrink-0 ${
+                        dateFilter.preset !== 'all' ? 'text-emerald-600' : isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                      }`}
+                    />
+                    <span
+                      className={`truncate font-medium ${
+                        dateFilter.preset !== 'all' ? 'text-emerald-700 dark:text-emerald-400' : ''
+                      }`}
+                    >
                       {getDateFilterLabel()}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 flex-shrink-0">
                     {dateFilter.preset !== 'all' && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           clearDateFilter();
                         }}
-                        className={`p-1.5 rounded-full transition-all duration-200 hover:scale-110 ${
-                          isDarkMode 
-                            ? 'hover:bg-gray-600 text-gray-400 hover:text-red-400' 
+                        className={`p-1 rounded-full transition-colors ${
+                          isDarkMode
+                            ? 'hover:bg-gray-700 text-gray-400 hover:text-red-400'
                             : 'hover:bg-red-50 text-gray-500 hover:text-red-600'
                         }`}
                         title="Clear date filter"
@@ -314,9 +310,7 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                         <X className="h-3 w-3" />
                       </button>
                     )}
-                    <div className={`transition-transform duration-200 ${
-                      showDatePicker ? 'rotate-180' : ''
-                    }`}>
+                    <div className={`transition-transform ${showDatePicker ? 'rotate-180' : ''}`}>
                       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
@@ -324,55 +318,48 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                   </div>
                 </button>
 
-                {/* Date Picker Dropdown */}
                 {showDatePicker && (
                   <>
-                    <div 
-                      className="fixed inset-0 z-40" 
-                      onClick={() => setShowDatePicker(false)}
-                    />
-                    <div className={`absolute right-0 mt-3 w-96 rounded-xl shadow-2xl border-2 z-50 backdrop-blur-sm animate-slide-down ${
-                      isDarkMode 
-                        ? 'bg-gray-800/95 border-gray-600' 
-                        : 'bg-white/95 border-gray-200'
-                    }`}>
+                    <div className="fixed inset-0 z-40" onClick={() => setShowDatePicker(false)} />
+                    <div
+                      className={`absolute right-0 mt-3 w-96 rounded-3xl shadow-2xl z-50 ${
+                        isDarkMode ? 'bg-gray-800' : 'bg-white'
+                      }`}
+                    >
                       <div className="p-6">
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className={`p-2 rounded-lg ${
-                            isDarkMode ? 'bg-blue-900/50' : 'bg-blue-100'
-                          }`}>
-                            <CalendarDays className="h-5 w-5 text-blue-600" />
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 rounded-2xl bg-emerald-100 flex items-center justify-center">
+                            <CalendarDays className="h-5 w-5 text-emerald-700" />
                           </div>
-                          <h4 className={`text-lg font-semibold ${
-                            isDarkMode ? 'text-white' : 'text-gray-900'
-                          }`}>
+                          <h4
+                            className={`text-lg font-semibold tracking-tight ${
+                              isDarkMode ? 'text-white' : 'text-gray-900'
+                            }`}
+                          >
                             Filter by Date
                           </h4>
                         </div>
-                        
-                        <div className={`text-sm mb-4 ${
-                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                        }`}>
-                          Choose a quick preset or set a custom date range
-                        </div>
-                        
-                        {/* Quick Presets */}
-                        <div className="grid grid-cols-2 gap-3 mb-6">
+
+                        <p className={`text-sm mb-5 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          Choose a quick preset or set a custom date range.
+                        </p>
+
+                        <div className="grid grid-cols-2 gap-2 mb-5">
                           {[
                             { key: 'all', label: 'All Dates' },
                             { key: 'today', label: 'Today' },
                             { key: 'week', label: 'This Week' },
-                            { key: 'month', label: 'This Month' }
-                          ].map(preset => (
+                            { key: 'month', label: 'This Month' },
+                          ].map((preset) => (
                             <button
                               key={preset.key}
                               onClick={() => handleDatePreset(preset.key as any)}
-                              className={`px-4 py-3 text-sm rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
+                              className={`px-4 py-2.5 text-sm rounded-full font-medium transition-colors ${
                                 dateFilter.preset === preset.key
-                                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25'
-                                  : isDarkMode 
-                                    ? 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-gray-600' 
-                                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                                  ? 'bg-emerald-700 text-white shadow-sm'
+                                  : isDarkMode
+                                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                  : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
                               }`}
                             >
                               {preset.label}
@@ -380,91 +367,88 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                           ))}
                         </div>
 
-                        {/* Custom Date Range */}
-                        <div className={`space-y-4 p-4 rounded-lg border-2 border-dashed ${
-                          isDarkMode 
-                            ? 'border-gray-600 bg-gray-700/50' 
-                            : 'border-gray-300 bg-gray-50/50'
-                        }`}>
-                          <div className="flex items-center gap-2 mb-3">
-                            <svg className="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span className={`text-sm font-medium ${
+                        <div
+                          className={`space-y-3 p-4 rounded-2xl ${
+                            isDarkMode ? 'bg-gray-700/60' : 'bg-gray-50'
+                          }`}
+                        >
+                          <div
+                            className={`flex items-center gap-2 text-sm font-medium ${
                               isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                            }`}>
-                              Custom Date Range
-                            </span>
+                            }`}
+                          >
+                            <CalendarDays className="h-4 w-4 text-emerald-600" />
+                            Custom Date Range
                           </div>
                           <div>
-                            <label className={`block text-sm font-medium mb-2 ${
-                              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                            }`}>
-                              📅 From Date
+                            <label className={`block text-xs mb-1.5 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              From Date
                             </label>
                             <input
                               type="date"
                               value={dateFilter.startDate}
-                              onChange={(e) => setDateFilter(prev => ({ 
-                                ...prev, 
-                                startDate: e.target.value,
-                                preset: 'custom'
-                              }))}
-                              className={`w-full px-4 py-3 text-sm rounded-lg border transition-all duration-200 focus:scale-105 ${
-                                isDarkMode 
-                                  ? 'bg-gray-600 border-gray-500 text-white focus:bg-gray-500' 
-                                  : 'bg-white border-gray-300 text-gray-900 focus:bg-blue-50'
-                              } focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm`}
+                              onChange={(e) =>
+                                setDateFilter((prev) => ({
+                                  ...prev,
+                                  startDate: e.target.value,
+                                  preset: 'custom',
+                                }))
+                              }
+                              className={`w-full px-4 py-2.5 text-sm rounded-2xl outline-none transition-colors ${
+                                isDarkMode
+                                  ? 'bg-gray-800 text-white border border-gray-600 focus:border-emerald-500'
+                                  : 'bg-white text-gray-900 border border-gray-200 focus:border-emerald-500'
+                              }`}
                             />
                           </div>
                           <div>
-                            <label className={`block text-sm font-medium mb-2 ${
-                              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                            }`}>
-                              📅 To Date
+                            <label className={`block text-xs mb-1.5 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              To Date
                             </label>
                             <input
                               type="date"
                               value={dateFilter.endDate}
-                              onChange={(e) => setDateFilter(prev => ({ 
-                                ...prev, 
-                                endDate: e.target.value,
-                                preset: 'custom'
-                              }))}
-                              className={`w-full px-4 py-3 text-sm rounded-lg border transition-all duration-200 focus:scale-105 ${
-                                isDarkMode 
-                                  ? 'bg-gray-600 border-gray-500 text-white focus:bg-gray-500' 
-                                  : 'bg-white border-gray-300 text-gray-900 focus:bg-blue-50'
-                              } focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm`}
+                              onChange={(e) =>
+                                setDateFilter((prev) => ({
+                                  ...prev,
+                                  endDate: e.target.value,
+                                  preset: 'custom',
+                                }))
+                              }
+                              className={`w-full px-4 py-2.5 text-sm rounded-2xl outline-none transition-colors ${
+                                isDarkMode
+                                  ? 'bg-gray-800 text-white border border-gray-600 focus:border-emerald-500'
+                                  : 'bg-white text-gray-900 border border-gray-200 focus:border-emerald-500'
+                              }`}
                             />
                           </div>
                         </div>
 
-                        <div className={`flex justify-between items-center mt-6 pt-4 border-t ${
-                          isDarkMode ? 'border-gray-600' : 'border-gray-200'
-                        }`}>
-                          <div className={`text-xs ${
-                            isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                          }`}>
+                        <div
+                          className={`flex justify-between items-center mt-5 pt-4 border-t ${
+                            isDarkMode ? 'border-gray-700' : 'border-gray-100'
+                          }`}
+                        >
+                          <div className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
                             {filteredAudits.length} audit{filteredAudits.length !== 1 ? 's' : ''} found
                           </div>
-                          <div className="flex gap-3">
-                          <button
-                            onClick={clearDateFilter}
-                            className={`px-4 py-2 text-sm rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
-                              isDarkMode 
-                                ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
-                                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
-                            }`}
-                          >
-                            🗑️ Clear
-                          </button>
-                          <button
-                            onClick={() => setShowDatePicker(false)}
-                            className="px-6 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 hover:scale-105 shadow-lg shadow-blue-500/25 font-medium"
-                          >
-                            ✅ Apply Filter
-                          </button>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={clearDateFilter}
+                              className={`px-4 py-2 text-sm rounded-full font-medium transition-colors ${
+                                isDarkMode
+                                  ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700'
+                                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+                              }`}
+                            >
+                              Clear
+                            </button>
+                            <button
+                              onClick={() => setShowDatePicker(false)}
+                              className="px-5 py-2 text-sm bg-emerald-700 text-white rounded-full hover:bg-emerald-800 shadow-sm transition-colors font-semibold"
+                            >
+                              Apply Filter
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -486,16 +470,14 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
           />
         ) : viewFormat === 'table' ? (
           /* Table View */
-          <div className={`rounded-lg shadow-sm border overflow-hidden ${
-            isDarkMode 
-              ? 'bg-gray-800 border-gray-700' 
-              : 'bg-white border-gray-200'
+          <div className={`rounded-2xl overflow-hidden ${
+            isDarkMode
+              ? 'bg-gray-700/40'
+              : 'bg-gray-50'
           }`}>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className={`${
-                  isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
-                }`}>
+                <thead className={`${isDarkMode ? 'bg-gray-800/60' : 'bg-white'}`}>
                   <tr>
                     <th className={`px-4 py-3 text-left text-xs font-medium uppercase tracking-wider ${
                       isDarkMode ? 'text-gray-300' : 'text-gray-500'
@@ -587,16 +569,16 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                           </span>
                           {audit.auditSheetLinks.length > 0 && (
                             <div className="flex -space-x-1">
-                              {audit.auditSheetLinks.slice(0, 3).map((sheet, index) => (
+                              {audit.auditSheetLinks.slice(0, 3).map((sheet) => (
                                 <a
                                   key={sheet.id}
                                   href={sheet.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className={`inline-flex items-center justify-center w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 ${
-                                    isDarkMode 
-                                      ? 'bg-blue-600 border-gray-800 text-white hover:bg-blue-500' 
-                                      : 'bg-blue-500 border-white text-white hover:bg-blue-600'
+                                    isDarkMode
+                                      ? 'bg-emerald-600 border-gray-800 text-white hover:bg-emerald-500'
+                                      : 'bg-emerald-600 border-white text-white hover:bg-emerald-700'
                                   }`}
                                   title={sheet.name}
                                 >
@@ -617,13 +599,13 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                         </div>
                       </td>
                       <td className="px-4 py-4">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => setEditingAudit(audit)}
-                            className={`p-1.5 rounded-lg transition-colors ${
-                              isDarkMode 
-                                ? 'text-gray-400 hover:text-blue-400 hover:bg-blue-900/30' 
-                                : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                            className={`p-2 rounded-full transition-colors ${
+                              isDarkMode
+                                ? 'text-gray-400 hover:text-emerald-400 hover:bg-emerald-900/30'
+                                : 'text-gray-500 hover:text-emerald-700 hover:bg-emerald-50'
                             }`}
                             title="Edit audit"
                           >
@@ -631,10 +613,10 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                           </button>
                           <button
                             onClick={() => handleDeleteAudit(audit.id)}
-                            className={`p-1.5 rounded-lg transition-colors ${
-                              isDarkMode 
-                                ? 'text-gray-400 hover:text-red-400 hover:bg-red-900/30' 
-                                : 'text-gray-600 hover:text-red-600 hover:bg-red-50'
+                            className={`p-2 rounded-full transition-colors ${
+                              isDarkMode
+                                ? 'text-gray-400 hover:text-red-400 hover:bg-red-900/30'
+                                : 'text-gray-500 hover:text-red-600 hover:bg-red-50'
                             }`}
                             title="Delete audit"
                           >
@@ -652,31 +634,28 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
           /* Card View */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
             {filteredAudits.map((audit) => (
-              <div key={audit.id} className={`card card-hover p-4 lg:p-6 transition-all duration-200 hover-lift ${
-                isDarkMode 
-                  ? 'bg-gray-800 border-gray-700' 
-                  : 'bg-white border-gray-200'
-              }`}>
+              <div
+                key={audit.id}
+                className={`rounded-2xl p-5 transition-all ${
+                  isDarkMode ? 'bg-gray-700/40 hover:bg-gray-700/60' : 'bg-gray-50 hover:bg-gray-100/70'
+                }`}
+              >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h3 className={`text-lg font-semibold mb-2 ${
-                      isDarkMode ? 'text-white' : 'text-gray-900'
-                    }`}>
+                  <div className="flex-1 min-w-0">
+                    <h3 className={`text-base font-semibold mb-2 truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       {audit.projectName}
                     </h3>
-                    <div className={`space-y-2 text-sm ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}>
+                    <div className={`space-y-1.5 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                       <div className="flex items-center gap-2">
                         <Globe className="h-4 w-4" />
-                        <span>{audit.clientWebsite}</span>
+                        <span className="truncate">{audit.clientWebsite}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4" />
                         <span>{audit.businessDeveloper}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-purple-500" />
+                        <User className="h-4 w-4 text-emerald-600" />
                         <span>Auditor: {audit.auditor}</span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -685,13 +664,13 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <button
                       onClick={() => setEditingAudit(audit)}
-                      className={`p-2 rounded-lg transition-colors ${
-                        isDarkMode 
-                          ? 'text-gray-400 hover:text-blue-400 hover:bg-blue-900/30' 
-                          : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                      className={`p-2 rounded-full transition-colors ${
+                        isDarkMode
+                          ? 'text-gray-400 hover:text-emerald-400 hover:bg-emerald-900/30'
+                          : 'text-gray-500 hover:text-emerald-700 hover:bg-emerald-50'
                       }`}
                       title="Edit audit"
                     >
@@ -699,10 +678,10 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                     </button>
                     <button
                       onClick={() => handleDeleteAudit(audit.id)}
-                      className={`p-2 rounded-lg transition-colors ${
-                        isDarkMode 
-                          ? 'text-gray-400 hover:text-red-400 hover:bg-red-900/30' 
-                          : 'text-gray-600 hover:text-red-600 hover:bg-red-50'
+                      className={`p-2 rounded-full transition-colors ${
+                        isDarkMode
+                          ? 'text-gray-400 hover:text-red-400 hover:bg-red-900/30'
+                          : 'text-gray-500 hover:text-red-600 hover:bg-red-50'
                       }`}
                       title="Delete audit"
                     >
@@ -711,39 +690,35 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                   </div>
                 </div>
 
-                {/* Audit Sheets */}
                 <div className="space-y-2">
-                  <h4 className={`text-sm font-medium ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
+                  <h4 className={`text-xs font-semibold uppercase tracking-wider ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                     Audit Sheets ({audit.auditSheetLinks.length})
                   </h4>
                   {audit.auditSheetLinks.length === 0 ? (
-                    <p className={`text-sm ${
-                      isDarkMode ? 'text-gray-500' : 'text-gray-500'
-                    }`}>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
                       No audit sheets added yet
                     </p>
                   ) : (
                     <div className="space-y-2">
                       {audit.auditSheetLinks.map((sheet) => (
-                        <div key={sheet.id} className={`flex items-center justify-between p-2 rounded-lg ${
-                          isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
-                        }`}>
+                        <div
+                          key={sheet.id}
+                          className={`flex items-center justify-between p-2.5 rounded-xl ${
+                            isDarkMode ? 'bg-gray-800' : 'bg-white'
+                          }`}
+                        >
                           <div className="flex-1 min-w-0">
                             {sheet.type && (
                               <div className="flex items-center gap-2 mb-1">
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                AUDIT_SHEET_TYPES[sheet.type].color
-                              }`}>
-                                {AUDIT_SHEET_TYPES[sheet.type].label}
-                              </span>
+                                <span
+                                  className={`px-2 py-0.5 rounded-full text-xs font-medium ${AUDIT_SHEET_TYPES[sheet.type].color}`}
+                                >
+                                  {AUDIT_SHEET_TYPES[sheet.type].label}
+                                </span>
                               </div>
                             )}
                             {sheet.description && (
-                              <p className={`text-xs truncate ${
-                                isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                              }`}>
+                              <p className={`text-xs truncate ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                                 {sheet.description}
                               </p>
                             )}
@@ -752,10 +727,8 @@ export default function AuditManagementDashboard(_: AuditManagementDashboardProp
                             href={sheet.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`p-1 rounded transition-colors ${
-                              isDarkMode 
-                                ? 'text-gray-400 hover:text-blue-400' 
-                                : 'text-gray-600 hover:text-blue-600'
+                            className={`p-1.5 rounded-full transition-colors ${
+                              isDarkMode ? 'text-gray-400 hover:text-emerald-400' : 'text-gray-500 hover:text-emerald-700'
                             }`}
                             title="Open audit sheet"
                           >
