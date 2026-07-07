@@ -8,11 +8,14 @@ import {
   Minus,
   Calendar,
   Link as LinkIcon,
+  Settings2,
+  X,
 } from 'lucide-react';
 import { Project } from '../../types';
 import { useTheme } from '../../contexts/ThemeContext';
 import { StatsService, ProjectStatsAggregate, GoogleConnection } from '../../services/statsService';
 import EmptyState from '../ui/EmptyState';
+import ConnectGoogleCard from './ConnectGoogleCard';
 
 interface ProjectStatsDashboardProps {
   projects: Project[];
@@ -129,6 +132,7 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
   const [filterTeam, setFilterTeam] = useState<string>('all');
   const [filterBD, setFilterBD] = useState<string>('all');
   const [connectedOnly, setConnectedOnly] = useState(false);
+  const [connectProject, setConnectProject] = useState<Project | null>(null);
 
   const loadStats = async (days: RangePreset) => {
     setLoading(true);
@@ -438,6 +442,30 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
                     {isConnected ? 'No data in range' : 'Connect Google to see stats'}
                   </div>
                 )}
+
+                {/* Connect / Manage action */}
+                <button
+                  onClick={() => setConnectProject(p)}
+                  className={`mt-3 w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all ${
+                    isConnected
+                      ? isDarkMode
+                        ? 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      : 'bg-emerald-700 text-white hover:bg-emerald-800 shadow-sm'
+                  }`}
+                >
+                  {isConnected ? (
+                    <>
+                      <Settings2 className="h-3 w-3" />
+                      Manage
+                    </>
+                  ) : (
+                    <>
+                      <LinkIcon className="h-3 w-3" />
+                      Connect Google
+                    </>
+                  )}
+                </button>
               </div>
             );
           })}
@@ -448,6 +476,45 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
         <Calendar className="h-3.5 w-3.5" />
         Comparing last {rangeDays} days with the previous {rangeDays} days. Sync runs daily; use Sync now for an immediate refresh.
       </div>
+
+      {connectProject && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div
+            className={`rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden ${
+              isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+            }`}
+          >
+            <div
+              className={`flex items-center justify-between px-6 py-4 border-b shrink-0 ${
+                isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-100 bg-white'
+              }`}
+            >
+              <div className="min-w-0">
+                <h2 className={`text-lg font-bold tracking-tight truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {connectProject.name}
+                </h2>
+                <p className={`text-xs truncate ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  {connectProject.clientName}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setConnectProject(null);
+                  loadStats(rangeDays);
+                }}
+                className={`p-2 rounded-full transition-colors shrink-0 ${
+                  isDarkMode ? 'text-gray-400 hover:bg-gray-700' : 'text-gray-500 hover:bg-gray-100'
+                }`}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              <ConnectGoogleCard projectId={connectProject.id} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
