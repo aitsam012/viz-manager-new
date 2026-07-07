@@ -11,10 +11,8 @@ import {
   Settings,
   LogOut,
   Search,
-  Bell,
   Mail,
   HelpCircle,
-  Download,
   BarChart3,
   Command,
   AlertCircle,
@@ -226,23 +224,6 @@ export default function Dashboard({
           </div>
 
           <div className="flex-1" />
-
-          {/* Download card */}
-          <div className="relative rounded-2xl overflow-hidden mt-6 bg-gradient-to-br from-emerald-800 to-emerald-900 p-5 text-white">
-            <div className="absolute inset-0 opacity-20" style={{
-              backgroundImage: 'radial-gradient(circle at 20% 100%, rgba(255,255,255,0.3) 0%, transparent 40%)'
-            }} />
-            <div className="relative">
-              <div className="w-9 h-9 rounded-full bg-white/15 flex items-center justify-center mb-3">
-                <Download className="h-4 w-4" />
-              </div>
-              <h4 className="font-semibold text-sm leading-tight mb-1">Download our<br />Mobile App</h4>
-              <p className="text-white/70 text-xs mb-4">Get easy in another way</p>
-              <button className="w-full bg-white text-emerald-800 text-xs font-semibold py-2 rounded-full hover:bg-gray-50 transition-colors">
-                Download
-              </button>
-            </div>
-          </div>
         </div>
       </aside>
 
