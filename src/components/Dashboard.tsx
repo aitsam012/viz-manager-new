@@ -13,7 +13,6 @@ import {
   Search,
   Bell,
   Mail,
-  Circle,
   HelpCircle,
   Download,
   BarChart3,
@@ -132,9 +131,9 @@ export default function Dashboard({
         >
           {/* Logo */}
           <div className="flex items-center gap-2 px-2 mb-8">
-            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
-              <Circle className="h-5 w-5 text-emerald-600 fill-emerald-600" strokeWidth={0} />
-              <div className="absolute w-3 h-3 rounded-full bg-white" />
+            <div className="relative w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full border-[3px] border-emerald-600" />
+              <div className="absolute w-2 h-2 rounded-full bg-emerald-600" />
             </div>
             <span className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               VIZ Manager

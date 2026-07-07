@@ -23,43 +23,47 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Check for existing Supabase session on mount
   useEffect(() => {
-    let initialized = false;
+    let mounted = true;
 
-    // Listen for auth changes — fires synchronously with INITIAL_SESSION on mount
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'INITIAL_SESSION') {
-        try {
-          if (session?.user) {
-            const userData = await AuthService.getCurrentUser();
-            setUser(userData);
-          }
-        } catch (error) {
-          console.error('Error getting user data on init:', error);
-        } finally {
-          initialized = true;
-          setIsLoading(false);
-        }
-      } else if (event === 'SIGNED_IN' && session?.user) {
-        try {
-          const userData = await AuthService.getCurrentUser();
-          setUser(userData);
-        } catch (error) {
-          console.error('Error getting user data:', error);
-        }
-        if (!initialized) {
-          initialized = true;
-          setIsLoading(false);
-        }
+    // Initial session check
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!mounted) return;
+      if (session?.user) {
+        AuthService.getCurrentUser()
+          .then((userData) => {
+            if (mounted) setUser(userData);
+          })
+          .catch((error) => console.error('Error getting user data on init:', error))
+          .finally(() => {
+            if (mounted) setIsLoading(false);
+          });
+      } else {
+        setIsLoading(false);
+      }
+    }).catch((error) => {
+      console.error('Error getting session:', error);
+      if (mounted) setIsLoading(false);
+    });
+
+    // Listen for auth changes (avoid awaiting inside — causes deadlocks)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        setTimeout(() => {
+          AuthService.getCurrentUser()
+            .then((userData) => {
+              if (mounted) setUser(userData);
+            })
+            .catch((error) => console.error('Error getting user data:', error));
+        }, 0);
       } else if (event === 'SIGNED_OUT') {
-        setUser(null);
-        if (!initialized) {
-          initialized = true;
-          setIsLoading(false);
-        }
+        if (mounted) setUser(null);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
