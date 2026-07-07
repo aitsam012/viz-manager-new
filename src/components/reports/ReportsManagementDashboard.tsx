@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Plus, Search, Filter, Calendar, User, FileText, Edit, Trash2, Eye, Bell, AlertTriangle, CheckCircle, UserCheck, BarChart3 } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, Search, Calendar, User, FileText, Edit, Trash2, Bell, AlertTriangle } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Report, getTodayReports, getTomorrowReports, getPendingReports, isReportCompleted } from '../../types/reports';
-import { ReportService } from '../../services/reportService';
 import AddReportModal from './AddReportModal';
 import EditReportModal from './EditReportModal';
 import MetricCard from '../ui/MetricCard';
@@ -12,7 +11,7 @@ interface ReportsManagementDashboardProps {
   onBack: () => void;
 }
 
-export default function ReportsManagementDashboard({ onBack }: ReportsManagementDashboardProps) {
+export default function ReportsManagementDashboard(_: ReportsManagementDashboardProps) {
   const { isDarkMode } = useTheme();
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
@@ -110,86 +109,45 @@ export default function ReportsManagementDashboard({ onBack }: ReportsManagement
   };
 
   return (
-    <div className={`min-h-screen transition-colors ${
-      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-    }`}>
+    <div className={`rounded-3xl p-6 md:p-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
       {/* Header */}
-      <div className={`shadow-sm border-b transition-colors ${
-        isDarkMode 
-          ? 'bg-gray-800 border-gray-700' 
-          : 'bg-white border-gray-200'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4 lg:py-6">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={onBack}
-                className={`flex items-center gap-2 transition-colors ${
-                  isDarkMode 
-                    ? 'text-gray-400 hover:text-gray-200' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <ArrowLeft className="h-5 w-5" />
-                <span className="hidden sm:inline">Back to Dashboard</span>
-                <span className="sm:hidden">Back</span>
-              </button>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => window.location.href = '#audits'}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDarkMode 
-                    ? 'text-gray-400 hover:text-purple-400 hover:bg-purple-900/30' 
-                    : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50'
-                }`}
-                title="Go to Audit Management"
-              >
-                <BarChart3 className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => setViewFormat(viewFormat === 'cards' ? 'table' : 'cards')}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewFormat === 'table'
-                    ? 'bg-blue-600 text-white'
-                    : isDarkMode 
-                      ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-                title={`Switch to ${viewFormat === 'cards' ? 'table' : 'cards'} view`}
-              >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 6h18m-9 8h9m-9 4h9m-9-8H3m0 4h6" />
-                </svg>
-              </button>
-              <button
-                onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm lg:text-base"
-              >
-                <Plus className="h-4 w-4" />
-                <span className="hidden sm:inline">Add Report</span>
-                <span className="sm:hidden">Add</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="pb-4 lg:pb-6">
-            <h1 className={`text-xl lg:text-2xl xl:text-3xl font-bold mb-2 ${
-              isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>
-              Reports Management
-            </h1>
-            <p className={`text-sm lg:text-base ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>
-              Manage project reports, track schedules, and get weekly reminders
-            </p>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div>
+          <h1 className={`text-4xl font-bold tracking-tight mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            Reports Management
+          </h1>
+          <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+            Manage project reports, track schedules, and get weekly reminders.
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setViewFormat(viewFormat === 'cards' ? 'table' : 'cards')}
+            className={`p-2.5 rounded-full transition-colors ${
+              viewFormat === 'table'
+                ? 'bg-emerald-700 text-white'
+                : isDarkMode
+                ? 'text-gray-400 hover:bg-gray-700'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+            title={`Switch to ${viewFormat === 'cards' ? 'table' : 'cards'} view`}
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 6h18m-9 8h9m-9 4h9m-9-8H3m0 4h6" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 shadow-sm hover:shadow transition-all"
+          >
+            <Plus className="h-4 w-4" />
+            Add Report
+          </button>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6 xl:py-8">
+      <div>
         {/* Weekly Reminders */}
         {(todayReports.length > 0 || tomorrowReports.length > 0 || pendingReports.length > 0) && (
           <div className="mb-6 lg:mb-8">
@@ -351,31 +309,11 @@ export default function ReportsManagementDashboard({ onBack }: ReportsManagement
         )}
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
-          <MetricCard
-            title="Active Reports"
-            value={stats.total}
-            icon={FileText}
-            color="blue"
-          />
-          <MetricCard
-            title="Due Today"
-            value={stats.todayReports}
-            icon={AlertTriangle}
-            color="red"
-          />
-          <MetricCard
-            title="Due Tomorrow"
-            value={stats.tomorrowReports}
-            icon={Bell}
-            color="amber"
-          />
-          <MetricCard
-            title="Pending Reports"
-            value={stats.pendingReports}
-            icon={AlertTriangle}
-            color="red"
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <MetricCard title="Active Reports" value={stats.total} variant="highlight" subtitle="Currently active" />
+          <MetricCard title="Due Today" value={stats.todayReports} subtitle="Reports due today" />
+          <MetricCard title="Due Tomorrow" value={stats.tomorrowReports} subtitle="Coming up next" />
+          <MetricCard title="Pending Reports" value={stats.pendingReports} subtitle="Awaiting completion" />
         </div>
 
         {/* Search and Filter */}

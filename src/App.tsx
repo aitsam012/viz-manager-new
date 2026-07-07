@@ -7,21 +7,21 @@ import ProjectDetail from './components/ProjectDetail';
 import UserManagementDashboard from './components/admin/UserManagementDashboard';
 import AuditManagementDashboard from './components/audit/AuditManagementDashboard';
 import ReportsManagementDashboard from './components/reports/ReportsManagementDashboard';
+import AppLayout from './components/ui/AppLayout';
 import { Project } from './types';
 import { ProjectService } from './services/projectService';
+
+type View = 'dashboard' | 'projects' | 'users' | 'audits' | 'reports';
 
 function AppContent() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [currentView, setCurrentView] = useState<'dashboard' | 'projects' | 'users' | 'audits' | 'reports'>('projects');
+  const [currentView, setCurrentView] = useState<View>('projects');
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load projects from Supabase only when authenticated
   React.useEffect(() => {
-    if (!isAuthenticated || authLoading) {
-      return;
-    }
+    if (!isAuthenticated || authLoading) return;
 
     const loadProjects = async () => {
       try {
@@ -29,7 +29,6 @@ function AppContent() {
         setProjects(projectsData);
       } catch (error) {
         console.error('Error loading projects:', error);
-        // Handle case where tables don't exist yet
         if (error instanceof Error && error.message.includes('Could not find the table')) {
           console.warn('Database tables not found. Please run migrations in Supabase.');
           setProjects([]);
@@ -42,18 +41,12 @@ function AppContent() {
     loadProjects();
   }, [isAuthenticated, authLoading]);
 
-  const handleProjectSelect = (project: Project) => {
-    setSelectedProject(project);
-  };
-
-  const handleBackToDashboard = () => {
-    setSelectedProject(null);
-  };
+  const handleProjectSelect = (project: Project) => setSelectedProject(project);
 
   const handleProjectUpdate = async (updatedProject: Project) => {
     try {
       const updated = await ProjectService.updateProject(updatedProject.id, updatedProject);
-      setProjects(projects.map(p => p.id === updated.id ? updated : p));
+      setProjects(projects.map((p) => (p.id === updated.id ? updated : p)));
       setSelectedProject(updated);
     } catch (error) {
       console.error('Error updating project:', error);
@@ -74,7 +67,7 @@ function AppContent() {
   const handleProjectDelete = async (projectId: string) => {
     try {
       await ProjectService.deleteProject(projectId);
-      setProjects(projects.filter(p => p.id !== projectId));
+      setProjects(projects.filter((p) => p.id !== projectId));
       if (selectedProject && selectedProject.id === projectId) {
         setSelectedProject(null);
       }
@@ -84,38 +77,28 @@ function AppContent() {
     }
   };
 
-  const handleViewChange = (view: 'dashboard' | 'projects' | 'users') => {
+  const handleViewChange = (view: View) => {
     setCurrentView(view);
-    setSelectedProject(null); // Clear selected project when changing views
+    setSelectedProject(null);
   };
 
-  const handleViewChangeExtended = (view: 'dashboard' | 'projects' | 'users' | 'audits' | 'reports') => {
-    setCurrentView(view);
-    setSelectedProject(null); // Clear selected project when changing views
-  };
-
-  // Handle hash-based navigation for cross-page links
   React.useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.slice(1);
-      if (hash === 'audits') {
-        setCurrentView('audits');
-      } else if (hash === 'reports') {
-        setCurrentView('reports');
-      }
+      if (hash === 'audits') setCurrentView('audits');
+      else if (hash === 'reports') setCurrentView('reports');
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // Check initial hash
-
+    handleHashChange();
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  const renderCurrentView = () => {
+  const renderPageContent = () => {
     if (selectedProject) {
       return (
-        <ProjectDetail 
-          project={selectedProject} 
+        <ProjectDetail
+          project={selectedProject}
           onBack={() => setSelectedProject(null)}
           onUpdate={handleProjectUpdate}
         />
@@ -130,23 +113,19 @@ function AppContent() {
           </ProtectedRoute>
         );
       case 'audits':
-        return (
-          <AuditManagementDashboard onBack={() => setCurrentView('projects')} />
-        );
+        return <AuditManagementDashboard onBack={() => setCurrentView('projects')} />;
       case 'reports':
-        return (
-          <ReportsManagementDashboard onBack={() => setCurrentView('projects')} />
-        );
+        return <ReportsManagementDashboard onBack={() => setCurrentView('projects')} />;
       case 'projects':
+      case 'dashboard':
       default:
         return (
-          <Dashboard 
-            projects={projects} 
+          <Dashboard
+            projects={projects}
             onProjectSelect={handleProjectSelect}
             onProjectAdd={handleProjectAdd}
             onProjectDelete={handleProjectDelete}
-            onViewChange={handleViewChangeExtended}
-            currentView={currentView}
+            loading={loading}
           />
         );
     }
@@ -154,9 +133,9 @@ function AppContent() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-[#f2f4f0] dark:bg-gray-900 transition-colors">
-        {renderCurrentView()}
-      </div>
+      <AppLayout currentView={currentView} onViewChange={handleViewChange}>
+        {renderPageContent()}
+      </AppLayout>
     </ProtectedRoute>
   );
 }

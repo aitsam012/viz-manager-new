@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Plus, Search, Filter, Calendar, Globe, User, FileText, ExternalLink, Edit, Trash2, Eye, CalendarDays, X } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, Search, Calendar, Globe, User, FileText, ExternalLink, CreditCard as Edit, Trash2, CalendarDays, X } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Audit, BUSINESS_DEVELOPERS, AUDITORS, AUDIT_SHEET_TYPES } from '../../types/audit';
 import { AuditService } from '../../services/auditService';
@@ -12,7 +12,7 @@ interface AuditManagementDashboardProps {
   onBack: () => void;
 }
 
-export default function AuditManagementDashboard({ onBack }: AuditManagementDashboardProps) {
+export default function AuditManagementDashboard(_: AuditManagementDashboardProps) {
   const { isDarkMode } = useTheme();
   const [audits, setAudits] = useState<Audit[]>([]);
   const [loading, setLoading] = useState(true);
@@ -157,105 +157,62 @@ export default function AuditManagementDashboard({ onBack }: AuditManagementDash
   };
 
   return (
-    <div className={`min-h-screen transition-colors ${
-      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-    }`}>
+    <div className={`rounded-3xl p-6 md:p-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
       {/* Header */}
-      <div className={`shadow-sm border-b transition-colors ${
-        isDarkMode 
-          ? 'bg-gray-800 border-gray-700' 
-          : 'bg-white border-gray-200'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4 lg:py-6">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={onBack}
-                className={`flex items-center gap-2 transition-colors ${
-                  isDarkMode 
-                    ? 'text-gray-400 hover:text-gray-200' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <ArrowLeft className="h-5 w-5" />
-                <span className="hidden sm:inline">Back to Dashboard</span>
-                <span className="sm:hidden">Back</span>
-              </button>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => window.location.href = '#reports'}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDarkMode 
-                    ? 'text-gray-400 hover:text-green-400 hover:bg-green-900/30' 
-                    : 'text-gray-600 hover:text-green-600 hover:bg-green-50'
-                }`}
-                title="Go to Reports Management"
-              >
-                <Calendar className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => setViewFormat(viewFormat === 'cards' ? 'table' : 'cards')}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewFormat === 'table'
-                    ? 'bg-blue-600 text-white'
-                    : isDarkMode 
-                      ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-                title={`Switch to ${viewFormat === 'cards' ? 'table' : 'cards'} view`}
-              >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 6h18m-9 8h9m-9 4h9m-9-8H3m0 4h6" />
-                </svg>
-              </button>
-              <button
-                onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm lg:text-base"
-              >
-                <Plus className="h-4 w-4" />
-                <span className="hidden sm:inline">Add Audit</span>
-                <span className="sm:hidden">Add</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="pb-4 lg:pb-6">
-            <h1 className={`text-xl lg:text-2xl xl:text-3xl font-bold mb-2 ${
-              isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>
-              Audit Management
-            </h1>
-            <p className={`text-sm lg:text-base ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>
-              Manage client audits, track monthly progress, and organize audit sheets
-            </p>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div>
+          <h1 className={`text-4xl font-bold tracking-tight mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            Audit Management
+          </h1>
+          <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+            Manage client audits, track monthly progress, and organize audit sheets.
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setViewFormat(viewFormat === 'cards' ? 'table' : 'cards')}
+            className={`p-2.5 rounded-full transition-colors ${
+              viewFormat === 'table'
+                ? 'bg-emerald-700 text-white'
+                : isDarkMode
+                ? 'text-gray-400 hover:bg-gray-700'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+            title={`Switch to ${viewFormat === 'cards' ? 'table' : 'cards'} view`}
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 6h18m-9 8h9m-9 4h9m-9-8H3m0 4h6" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 shadow-sm hover:shadow transition-all"
+          >
+            <Plus className="h-4 w-4" />
+            Add Audit
+          </button>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6 xl:py-8">
+      <div>
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6 lg:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <MetricCard
             title="Total Audits"
             value={stats.total}
-            icon={FileText}
-            color="blue"
+            variant="highlight"
+            subtitle="Across all clients"
           />
           <MetricCard
             title="Business Developers"
             value={stats.uniqueBDs}
-            icon={User}
-            color="amber"
+            subtitle="Active BDs"
           />
           <MetricCard
             title="Auditors"
             value={stats.uniqueAuditors}
-            icon={User}
-            color="purple"
+            subtitle="Team members auditing"
           />
         </div>
 
