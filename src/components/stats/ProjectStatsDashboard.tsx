@@ -1,9 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Search, RefreshCw, BarChart3, TrendingUp, MousePointerClick, Eye, Users, Percent, Calendar } from 'lucide-react';
+import {
+  Search,
+  RefreshCw,
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  Calendar,
+  Link as LinkIcon,
+} from 'lucide-react';
 import { Project } from '../../types';
 import { useTheme } from '../../contexts/ThemeContext';
 import { StatsService, ProjectStatsAggregate, GoogleConnection } from '../../services/statsService';
-import MetricCard from '../ui/MetricCard';
 import EmptyState from '../ui/EmptyState';
 
 interface ProjectStatsDashboardProps {
@@ -16,11 +24,20 @@ function formatDate(d: Date) {
   return d.toISOString().slice(0, 10);
 }
 
-function computeRange(days: RangePreset) {
+function computeRanges(days: RangePreset) {
   const end = new Date();
   const start = new Date();
   start.setDate(end.getDate() - days);
-  return { start: formatDate(start), end: formatDate(end) };
+
+  const prevEnd = new Date(start);
+  prevEnd.setDate(prevEnd.getDate() - 1);
+  const prevStart = new Date(prevEnd);
+  prevStart.setDate(prevEnd.getDate() - days);
+
+  return {
+    current: { start: formatDate(start), end: formatDate(end) },
+    previous: { start: formatDate(prevStart), end: formatDate(prevEnd) },
+  };
 }
 
 function formatNumber(n: number) {
@@ -29,10 +46,79 @@ function formatNumber(n: number) {
   return String(Math.round(n));
 }
 
+function pctChange(current: number, previous: number): number | null {
+  if (previous === 0) return current === 0 ? 0 : null;
+  return ((current - previous) / previous) * 100;
+}
+
+interface DeltaChipProps {
+  change: number | null;
+  invert?: boolean;
+  isDarkMode: boolean;
+}
+
+function DeltaChip({ change, invert = false, isDarkMode }: DeltaChipProps) {
+  if (change === null) {
+    return (
+      <span className={`inline-flex items-center gap-0.5 text-[10px] font-medium ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+        <Minus className="h-2.5 w-2.5" />
+        new
+      </span>
+    );
+  }
+  const rounded = Math.round(change * 10) / 10;
+  if (Math.abs(rounded) < 0.1) {
+    return (
+      <span className={`inline-flex items-center gap-0.5 text-[10px] font-medium ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+        <Minus className="h-2.5 w-2.5" />
+        0%
+      </span>
+    );
+  }
+  const isUp = rounded > 0;
+  const isGood = invert ? !isUp : isUp;
+  const color = isGood
+    ? 'text-emerald-600 dark:text-emerald-400'
+    : 'text-red-600 dark:text-red-400';
+  const Icon = isUp ? TrendingUp : TrendingDown;
+  return (
+    <span className={`inline-flex items-center gap-0.5 text-[10px] font-semibold ${color}`}>
+      <Icon className="h-2.5 w-2.5" />
+      {isUp ? '+' : ''}
+      {rounded}%
+    </span>
+  );
+}
+
+interface StatRowProps {
+  label: string;
+  value: string;
+  change: number | null;
+  invert?: boolean;
+  isDarkMode: boolean;
+}
+
+function StatRow({ label, value, change, invert, isDarkMode }: StatRowProps) {
+  return (
+    <div className="flex items-center justify-between gap-2">
+      <span className={`text-[11px] font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+        {label}
+      </span>
+      <div className="flex items-center gap-1.5">
+        <span className={`text-sm font-semibold tabular-nums ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          {value}
+        </span>
+        <DeltaChip change={change} invert={invert} isDarkMode={isDarkMode} />
+      </div>
+    </div>
+  );
+}
+
 export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboardProps) {
   const { isDarkMode } = useTheme();
   const [rangeDays, setRangeDays] = useState<RangePreset>(28);
-  const [aggregates, setAggregates] = useState<Map<string, ProjectStatsAggregate>>(new Map());
+  const [current, setCurrent] = useState<Map<string, ProjectStatsAggregate>>(new Map());
+  const [previous, setPrevious] = useState<Map<string, ProjectStatsAggregate>>(new Map());
   const [connections, setConnections] = useState<Map<string, GoogleConnection>>(new Map());
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
@@ -42,17 +128,20 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
   const [filterProject, setFilterProject] = useState<string>('all');
   const [filterTeam, setFilterTeam] = useState<string>('all');
   const [filterBD, setFilterBD] = useState<string>('all');
+  const [connectedOnly, setConnectedOnly] = useState(false);
 
   const loadStats = async (days: RangePreset) => {
     setLoading(true);
     setError(null);
     try {
-      const { start, end } = computeRange(days);
-      const [rows, conns] = await Promise.all([
-        StatsService.getStatsInRange(start, end),
+      const { current: cur, previous: prev } = computeRanges(days);
+      const [curRows, prevRows, conns] = await Promise.all([
+        StatsService.getStatsInRange(cur.start, cur.end),
+        StatsService.getStatsInRange(prev.start, prev.end),
         StatsService.listConnections(),
       ]);
-      setAggregates(StatsService.aggregateByProject(rows));
+      setCurrent(StatsService.aggregateByProject(curRows));
+      setPrevious(StatsService.aggregateByProject(prevRows));
       const connMap = new Map<string, GoogleConnection>();
       for (const c of conns) connMap.set(c.project_id, c);
       setConnections(connMap);
@@ -71,7 +160,7 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
     setSyncing(true);
     setError(null);
     try {
-      await StatsService.syncNow(undefined, rangeDays);
+      await StatsService.syncNow(undefined, rangeDays * 2);
       await loadStats(rangeDays);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sync failed');
@@ -102,38 +191,11 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
       const matchesProject = filterProject === 'all' || p.id === filterProject;
       const matchesTeam = filterTeam === 'all' || (p.teamMembers || []).includes(filterTeam);
       const matchesBD = filterBD === 'all' || p.businessDeveloper === filterBD;
-      return matchesSearch && matchesProject && matchesTeam && matchesBD;
+      const matchesConnected =
+        !connectedOnly || connections.get(p.id)?.status === 'connected';
+      return matchesSearch && matchesProject && matchesTeam && matchesBD && matchesConnected;
     });
-  }, [projects, searchTerm, filterProject, filterTeam, filterBD]);
-
-  const totals = useMemo(() => {
-    let clicks = 0;
-    let impressions = 0;
-    let totalUsers = 0;
-    let organicUsers = 0;
-    let positionSum = 0;
-    let positionCount = 0;
-    for (const p of filteredProjects) {
-      const a = aggregates.get(p.id);
-      if (!a) continue;
-      clicks += a.clicks;
-      impressions += a.impressions;
-      totalUsers += a.total_users;
-      organicUsers += a.organic_users;
-      if (a.days_with_data > 0) {
-        positionSum += a.position;
-        positionCount += 1;
-      }
-    }
-    return {
-      clicks,
-      impressions,
-      ctr: impressions > 0 ? clicks / impressions : 0,
-      position: positionCount > 0 ? positionSum / positionCount : 0,
-      totalUsers,
-      organicUsers,
-    };
-  }, [filteredProjects, aggregates]);
+  }, [projects, searchTerm, filterProject, filterTeam, filterBD, connectedOnly, connections]);
 
   const selectClass = `w-full px-4 py-2.5 rounded-full text-sm outline-none transition-colors ${
     isDarkMode
@@ -144,13 +206,13 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
   return (
     <div className={`rounded-3xl p-6 md:p-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div>
           <h1 className={`text-4xl font-bold tracking-tight mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
             Project Stats
           </h1>
           <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
-            Search Console + GA4 metrics across all connected projects.
+            Per-project Search Console + GA4 metrics, compared with the prior period.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -195,19 +257,6 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
           {error}
         </div>
       )}
-
-      {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <MetricCard title="Clicks" value={formatNumber(totals.clicks)} variant="highlight" subtitle={`Last ${rangeDays} days`} />
-        <MetricCard title="Impressions" value={formatNumber(totals.impressions)} subtitle="Search Console" />
-        <MetricCard title="Avg CTR" value={`${(totals.ctr * 100).toFixed(2)}%`} subtitle="Clicks / Impressions" />
-        <MetricCard title="Avg Position" value={totals.position ? totals.position.toFixed(1) : '—'} subtitle="Lower is better" />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-        <MetricCard title="Total Users" value={formatNumber(totals.totalUsers)} subtitle="GA4 across projects" />
-        <MetricCard title="Organic Users" value={formatNumber(totals.organicUsers)} subtitle="Organic Search channel" />
-      </div>
 
       {/* Filters */}
       <div className={`rounded-2xl p-4 lg:p-5 mb-6 ${isDarkMode ? 'bg-gray-700/40' : 'bg-gray-50'}`}>
@@ -260,10 +309,24 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
               ))}
             </select>
           </div>
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <label className={`inline-flex items-center gap-2 cursor-pointer text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <input
+                type="checkbox"
+                checked={connectedOnly}
+                onChange={(e) => setConnectedOnly(e.target.checked)}
+                className="rounded border-gray-300 text-emerald-700 focus:ring-emerald-500"
+              />
+              Connected only
+            </label>
+            <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Showing {filteredProjects.length} of {projects.length} projects
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Table */}
+      {/* Project Cards */}
       {loading ? (
         <div className={`rounded-2xl p-12 text-center ${isDarkMode ? 'bg-gray-700/40 text-gray-400' : 'bg-gray-50 text-gray-500'}`}>
           Loading stats…
@@ -275,131 +338,115 @@ export default function ProjectStatsDashboard({ projects }: ProjectStatsDashboar
           description="Adjust the filters above, or connect a project to Google in the project detail view."
         />
       ) : (
-        <div className={`rounded-2xl overflow-hidden ${isDarkMode ? 'bg-gray-700/40' : 'bg-gray-50'}`}>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className={isDarkMode ? 'bg-gray-800/60' : 'bg-white'}>
-                <tr>
-                  {['Project', 'Clicks', 'Impressions', 'CTR', 'Avg Pos', 'Total Users', 'Organic Users', 'Status'].map((h) => (
-                    <th
-                      key={h}
-                      className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-500'
-                      }`}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          {filteredProjects.map((p) => {
+            const a = current.get(p.id);
+            const b = previous.get(p.id);
+            const conn = connections.get(p.id);
+            const hasData = !!a && a.days_with_data > 0;
+            const isConnected = conn?.status === 'connected';
+
+            return (
+              <div
+                key={p.id}
+                className={`rounded-2xl p-4 border transition-all hover:shadow-md ${
+                  isDarkMode
+                    ? 'bg-gray-800 border-gray-700 hover:border-gray-600'
+                    : 'bg-white border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                {/* Header */}
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <div className="min-w-0 flex-1">
+                    <h3
+                      className={`text-sm font-bold truncate ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                      title={p.name}
                     >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className={`divide-y ${isDarkMode ? 'divide-gray-700' : 'divide-gray-200'}`}>
-                {filteredProjects.map((p) => {
-                  const a = aggregates.get(p.id);
-                  const conn = connections.get(p.id);
-                  const hasData = !!a && a.days_with_data > 0;
-                  return (
-                    <tr key={p.id} className={`transition-colors ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-white'}`}>
-                      <td className="px-4 py-4">
-                        <div>
-                          <div className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                            {p.name}
-                          </div>
-                          <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                            {p.clientName}
-                            {p.businessDeveloper ? ` • BD: ${p.businessDeveloper}` : ''}
-                          </div>
-                        </div>
-                      </td>
-                      <td className={`px-4 py-4 text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                        {hasData ? (
-                          <span className="inline-flex items-center gap-1.5">
-                            <MousePointerClick className="h-3.5 w-3.5 text-emerald-600" />
-                            {formatNumber(a!.clicks)}
-                          </span>
-                        ) : (
-                          <span className={isDarkMode ? 'text-gray-500' : 'text-gray-400'}>—</span>
-                        )}
-                      </td>
-                      <td className={`px-4 py-4 text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                        {hasData ? (
-                          <span className="inline-flex items-center gap-1.5">
-                            <Eye className="h-3.5 w-3.5 text-emerald-600" />
-                            {formatNumber(a!.impressions)}
-                          </span>
-                        ) : (
-                          <span className={isDarkMode ? 'text-gray-500' : 'text-gray-400'}>—</span>
-                        )}
-                      </td>
-                      <td className={`px-4 py-4 text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                        {hasData ? (
-                          <span className="inline-flex items-center gap-1.5">
-                            <Percent className="h-3.5 w-3.5 text-emerald-600" />
-                            {(a!.ctr * 100).toFixed(2)}%
-                          </span>
-                        ) : (
-                          <span className={isDarkMode ? 'text-gray-500' : 'text-gray-400'}>—</span>
-                        )}
-                      </td>
-                      <td className={`px-4 py-4 text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                        {hasData ? (
-                          <span className="inline-flex items-center gap-1.5">
-                            <TrendingUp className="h-3.5 w-3.5 text-emerald-600" />
-                            {a!.position.toFixed(1)}
-                          </span>
-                        ) : (
-                          <span className={isDarkMode ? 'text-gray-500' : 'text-gray-400'}>—</span>
-                        )}
-                      </td>
-                      <td className={`px-4 py-4 text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                        {hasData ? (
-                          <span className="inline-flex items-center gap-1.5">
-                            <Users className="h-3.5 w-3.5 text-emerald-600" />
-                            {formatNumber(a!.total_users)}
-                          </span>
-                        ) : (
-                          <span className={isDarkMode ? 'text-gray-500' : 'text-gray-400'}>—</span>
-                        )}
-                      </td>
-                      <td className={`px-4 py-4 text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                        {hasData ? (
-                          <span className="inline-flex items-center gap-1.5">
-                            <Users className="h-3.5 w-3.5 text-emerald-600" />
-                            {formatNumber(a!.organic_users)}
-                          </span>
-                        ) : (
-                          <span className={isDarkMode ? 'text-gray-500' : 'text-gray-400'}>—</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-4">
-                        {conn?.status === 'connected' ? (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200">
-                            Connected
-                          </span>
-                        ) : conn?.status === 'error' ? (
-                          <span
-                            title={conn.last_error || 'Sync error'}
-                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200"
-                          >
-                            Error
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                            Not connected
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      {p.name}
+                    </h3>
+                    <p className={`text-[11px] truncate ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {p.clientName}
+                    </p>
+                  </div>
+                  {isConnected ? (
+                    <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      Live
+                    </span>
+                  ) : conn?.status === 'error' ? (
+                    <span
+                      title={conn.last_error || 'Sync error'}
+                      className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200"
+                    >
+                      Error
+                    </span>
+                  ) : (
+                    <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                      <LinkIcon className="h-2.5 w-2.5" />
+                      Not linked
+                    </span>
+                  )}
+                </div>
+
+                {/* Stats */}
+                {hasData ? (
+                  <div className="space-y-1.5">
+                    <StatRow
+                      label="Clicks"
+                      value={formatNumber(a!.clicks)}
+                      change={pctChange(a!.clicks, b?.clicks ?? 0)}
+                      isDarkMode={isDarkMode}
+                    />
+                    <StatRow
+                      label="Impressions"
+                      value={formatNumber(a!.impressions)}
+                      change={pctChange(a!.impressions, b?.impressions ?? 0)}
+                      isDarkMode={isDarkMode}
+                    />
+                    <StatRow
+                      label="CTR"
+                      value={`${(a!.ctr * 100).toFixed(2)}%`}
+                      change={pctChange(a!.ctr, b?.ctr ?? 0)}
+                      isDarkMode={isDarkMode}
+                    />
+                    <StatRow
+                      label="Avg Pos"
+                      value={a!.position.toFixed(1)}
+                      change={pctChange(a!.position, b?.position ?? 0)}
+                      invert
+                      isDarkMode={isDarkMode}
+                    />
+                    <StatRow
+                      label="Users"
+                      value={formatNumber(a!.total_users)}
+                      change={pctChange(a!.total_users, b?.total_users ?? 0)}
+                      isDarkMode={isDarkMode}
+                    />
+                    <StatRow
+                      label="Organic"
+                      value={formatNumber(a!.organic_users)}
+                      change={pctChange(a!.organic_users, b?.organic_users ?? 0)}
+                      isDarkMode={isDarkMode}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className={`text-center py-4 rounded-xl text-[11px] ${
+                      isDarkMode ? 'bg-gray-700/40 text-gray-500' : 'bg-gray-50 text-gray-400'
+                    }`}
+                  >
+                    {isConnected ? 'No data in range' : 'Connect Google to see stats'}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
       <div className={`mt-6 flex items-center gap-2 text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
         <Calendar className="h-3.5 w-3.5" />
-        Range: last {rangeDays} days. Data refreshes daily via scheduled sync — click Sync now for an immediate update.
+        Comparing last {rangeDays} days with the previous {rangeDays} days. Sync runs daily; use Sync now for an immediate refresh.
       </div>
     </div>
   );
