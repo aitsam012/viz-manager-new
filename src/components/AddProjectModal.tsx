@@ -64,16 +64,16 @@ export default function AddProjectModal({ onClose, onAdd }: AddProjectModalProps
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div
-        className={`rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto ${
+        className={`rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden ${
           isDarkMode ? 'bg-gray-800' : 'bg-white'
         }`}
       >
         <div
-          className={`flex items-center justify-between p-6 border-b ${
-            isDarkMode ? 'border-gray-700' : 'border-gray-100'
+          className={`flex items-center justify-between px-6 py-4 border-b shrink-0 ${
+            isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-100 bg-white'
           }`}
         >
-          <h2 className={`text-2xl font-bold tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          <h2 className={`text-xl font-bold tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
             Add New Project
           </h2>
           <button
@@ -86,7 +86,8 @@ export default function AddProjectModal({ onClose, onAdd }: AddProjectModalProps
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label className={labelClass}>Project Name *</label>
@@ -294,10 +295,11 @@ export default function AddProjectModal({ onClose, onAdd }: AddProjectModalProps
               ))}
             </div>
           </div>
+          </div>
 
           <div
-            className={`flex justify-end gap-3 pt-6 border-t ${
-              isDarkMode ? 'border-gray-700' : 'border-gray-100'
+            className={`flex justify-end gap-3 px-6 py-4 border-t shrink-0 ${
+              isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-100 bg-white'
             }`}
           >
             <button

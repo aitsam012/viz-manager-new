@@ -60,8 +60,8 @@ export default function AppLayout({
       <div className="p-4">
         {/* Top bar */}
         <div
-          className={`rounded-3xl px-4 md:px-6 py-3 flex items-center gap-3 md:gap-4 mb-4 ${
-            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          className={`sticky top-4 z-40 rounded-3xl px-4 md:px-6 py-3 flex items-center gap-3 md:gap-4 mb-4 shadow-sm ${
+            isDarkMode ? 'bg-gray-800/95 backdrop-blur' : 'bg-white/95 backdrop-blur'
           }`}
         >
           {/* Logo */}
