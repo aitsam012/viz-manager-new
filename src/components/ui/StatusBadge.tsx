@@ -26,9 +26,9 @@ export default function StatusBadge({ status, size = 'md', showIcon = true }: St
         };
       case 'In Progress':
         return {
-          classes: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+          classes: 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200',
           icon: Clock,
-          dot: 'bg-blue-500'
+          dot: 'bg-teal-500'
         };
       case 'Open':
         return {

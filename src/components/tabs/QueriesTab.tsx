@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, HelpCircle, Clock, CheckCircle, AlertCircle, User, Edit, Trash2, X, MessageSquare, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { Plus, HelpCircle, Clock, CheckCircle, AlertCircle, User, CreditCard as Edit, Trash2, X, MessageSquare, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { Project, Query } from '../../types';
 import StatusBadge from '../ui/StatusBadge';
 import EmptyState from '../ui/EmptyState';
@@ -159,7 +159,7 @@ export default function QueriesTab({ project, onUpdate }: QueriesTabProps) {
         const bulletText = line.trim().substring(2);
         return (
           <div key={index} className="flex items-start gap-2 mb-1">
-            <span className="text-blue-600 mt-1 text-sm">•</span>
+            <span className="text-emerald-600 mt-1 text-sm">•</span>
             <span className="flex-1">{formatInlineText(bulletText)}</span>
           </div>
         );
@@ -171,7 +171,7 @@ export default function QueriesTab({ project, onUpdate }: QueriesTabProps) {
         if (match) {
           return (
             <div key={index} className="flex items-start gap-2 mb-1">
-              <span className="text-blue-600 mt-1 text-sm font-medium">{match[1]}.</span>
+              <span className="text-emerald-600 mt-1 text-sm font-medium">{match[1]}.</span>
               <span className="flex-1">{formatInlineText(match[2])}</span>
             </div>
           );
@@ -207,7 +207,7 @@ export default function QueriesTab({ project, onUpdate }: QueriesTabProps) {
             href={part}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-700 underline inline-flex items-center gap-1"
+            className="text-emerald-600 hover:text-emerald-700 underline inline-flex items-center gap-1"
           >
             {part.length > 50 ? `${part.substring(0, 50)}...` : part}
             <ExternalLink className="h-3 w-3" />
@@ -270,7 +270,7 @@ export default function QueriesTab({ project, onUpdate }: QueriesTabProps) {
         </div>
         <button
           onClick={() => setShowAddForm(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
         >
           <Plus className="h-4 w-4" />
           Add Query
@@ -361,7 +361,7 @@ export default function QueriesTab({ project, onUpdate }: QueriesTabProps) {
                 required
                 value={newQuery.title}
                 onChange={(e) => setNewQuery(prev => ({ ...prev, title: e.target.value }))}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                   isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -381,8 +381,8 @@ export default function QueriesTab({ project, onUpdate }: QueriesTabProps) {
                   onClick={addQAItem}
                   className={`flex items-center gap-1 text-sm font-medium transition-colors ${
                     isDarkMode 
-                      ? 'text-blue-400 hover:text-blue-300' 
-                      : 'text-blue-600 hover:text-blue-700'
+                      ? 'text-emerald-400 hover:text-emerald-300' 
+                      : 'text-emerald-600 hover:text-emerald-700'
                   }`}
                 >
                   <Plus className="h-4 w-4" />
@@ -424,7 +424,7 @@ export default function QueriesTab({ project, onUpdate }: QueriesTabProps) {
                         <textarea
                           value={item.question}
                           onChange={(e) => updateQAItem(item.id, 'question', e.target.value)}
-                          className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                          className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                             isDarkMode 
                               ? 'bg-gray-600 border-gray-500 text-white placeholder-gray-400' 
                               : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -447,7 +447,7 @@ Formatting tips:
                         <textarea
                           value={item.answer}
                           onChange={(e) => updateQAItem(item.id, 'answer', e.target.value)}
-                          className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                          className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                             isDarkMode 
                               ? 'bg-gray-600 border-gray-500 text-white placeholder-gray-400' 
                               : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -478,7 +478,7 @@ Formatting tips:
                   type="text"
                   value={newQuery.linkedSheet}
                   onChange={(e) => setNewQuery(prev => ({ ...prev, linkedSheet: e.target.value }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -493,7 +493,7 @@ Formatting tips:
                 <select
                   value={newQuery.assignedTo}
                   onChange={(e) => setNewQuery(prev => ({ ...prev, assignedTo: e.target.value }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
@@ -523,7 +523,7 @@ Formatting tips:
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 {editingQuery ? 'Update Query' : 'Add Query'}
               </button>
@@ -606,8 +606,8 @@ Formatting tips:
                         onClick={() => handleEditQuery(query)}
                         className={`p-2 rounded-lg transition-all duration-200 hover-lift ${
                           isDarkMode 
-                            ? 'text-gray-400 hover:text-blue-400 hover:bg-gray-700' 
-                            : 'text-gray-600 hover:text-blue-600 hover:bg-white'
+                            ? 'text-gray-400 hover:text-emerald-400 hover:bg-gray-700' 
+                            : 'text-gray-600 hover:text-emerald-600 hover:bg-white'
                         }`}
                         title="Edit query"
                       >
@@ -622,7 +622,7 @@ Formatting tips:
                             isDarkMode 
                               ? 'bg-gray-700 border-gray-600 text-white' 
                               : 'bg-white border-gray-300 text-gray-900'
-                          } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                          } focus:ring-2 focus:ring-emerald-500 focus:border-transparent`}
                           onClick={(e) => e.stopPropagation()}
                         >
                           <option value="Open">Open</option>
@@ -657,7 +657,7 @@ Formatting tips:
                       <span>Updated {new Date(query.updatedAt).toLocaleDateString()}</span>
                     )}
                     {query.linkedSheet && (
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-xs">📊 {query.linkedSheet}</span>
+                      <span className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded-md text-xs">📊 {query.linkedSheet}</span>
                     )}
                     {query.assignedTo && (
                       <span className="bg-green-100 text-green-800 px-2 py-1 rounded-md text-xs flex items-center gap-1">
@@ -681,8 +681,8 @@ Formatting tips:
                         {item.question && (
                           <div>
                             <div className="flex items-center gap-2 mb-2">
-                              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                                <span className="text-xs font-bold text-blue-600">Q</span>
+                              <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center">
+                                <span className="text-xs font-bold text-emerald-600">Q</span>
                               </div>
                               <span className={`text-sm font-medium ${
                                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
@@ -727,8 +727,8 @@ Formatting tips:
                   <div className="p-6 border-t">
                     <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="w-4 h-4 bg-blue-100 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-bold text-blue-600">Q</span>
+                        <div className="w-4 h-4 bg-emerald-100 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-emerald-600">Q</span>
                         </div>
                         <span className="font-medium">Preview:</span>
                       </div>
@@ -748,7 +748,7 @@ Formatting tips:
                             e.stopPropagation();
                             toggleQueryExpansion(query.id);
                           }}
-                          className="text-blue-600 hover:text-blue-700 text-xs mt-1 flex items-center gap-1"
+                          className="text-emerald-600 hover:text-emerald-700 text-xs mt-1 flex items-center gap-1"
                         >
                           Click to expand full query
                           <ChevronDown className="h-3 w-3" />

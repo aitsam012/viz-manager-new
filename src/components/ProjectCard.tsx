@@ -45,7 +45,7 @@ export default function ProjectCard({
   };
 
   const progressColor =
-    progress >= 70 ? 'bg-emerald-500' : progress >= 40 ? 'bg-blue-500' : 'bg-amber-500';
+    progress >= 70 ? 'bg-emerald-500' : progress >= 40 ? 'bg-teal-500' : 'bg-amber-500';
 
   return (
     <div

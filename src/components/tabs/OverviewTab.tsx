@@ -125,7 +125,7 @@ export default function OverviewTab({ project, onUpdate }: OverviewTabProps) {
             <div key={index} className={`flex items-center gap-3 p-4 rounded-lg transition-all duration-200 hover-lift ${
               isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-50 hover:bg-gray-100'
             }`}>
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold shadow-md">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-full flex items-center justify-center text-white font-semibold shadow-md">
                 {member.split(' ').map(n => n[0]).join('')}
               </div>
               <div>
@@ -149,18 +149,18 @@ export default function OverviewTab({ project, onUpdate }: OverviewTabProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {project.upworkProfile && (
             <div className={`flex items-start gap-3 p-4 rounded-lg transition-all duration-200 hover-lift ${
-              isDarkMode ? 'bg-blue-900/30 hover:bg-blue-900/40' : 'bg-blue-50 hover:bg-blue-100'
+              isDarkMode ? 'bg-emerald-900/30 hover:bg-emerald-900/40' : 'bg-emerald-50 hover:bg-emerald-100'
             }`}>
               <div className={`w-12 h-12 rounded-lg flex items-center justify-center shadow-sm ${
-                isDarkMode ? 'bg-blue-800' : 'bg-blue-100'
+                isDarkMode ? 'bg-emerald-800' : 'bg-emerald-100'
               }`}>
-                <svg className="h-5 w-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.546-1.405 0-2.543-1.14-2.543-2.546V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3.014-2.439-5.463-5.439-5.463z"/>
                 </svg>
               </div>
               <div>
                 <p className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Upwork Profile</p>
-                <p className="text-blue-600 font-semibold">{project.upworkProfile}</p>
+                <p className="text-emerald-600 font-semibold">{project.upworkProfile}</p>
                 <p className={`text-caption mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Active freelance profile</p>
               </div>
             </div>
@@ -196,8 +196,8 @@ export default function OverviewTab({ project, onUpdate }: OverviewTabProps) {
             onClick={handleAddGoal}
             className={`btn btn-secondary btn-sm hover-lift ${
               isDarkMode 
-                ? 'text-blue-400 hover:text-blue-300' 
-                : 'text-blue-600 hover:text-blue-700'
+                ? 'text-emerald-400 hover:text-emerald-300' 
+                : 'text-emerald-600 hover:text-emerald-700'
             }`}
           >
             <Plus className="h-4 w-4" />
@@ -270,9 +270,9 @@ export default function OverviewTab({ project, onUpdate }: OverviewTabProps) {
                 isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-50 hover:bg-gray-100'
               }`}>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center mt-0.5 shadow-sm ${
-                  isDarkMode ? 'bg-blue-800' : 'bg-blue-100'
+                  isDarkMode ? 'bg-emerald-800' : 'bg-emerald-100'
                 }`}>
-                  <Key className="h-4 w-4 text-blue-600" />
+                  <Key className="h-4 w-4 text-emerald-600" />
                 </div>
                 <div className="flex-1">
                   <p className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{access.type}</p>

@@ -55,7 +55,7 @@ export const PERMISSION_LEVELS = {
       { section: 'documents' as const, actions: ['view', 'edit', 'create'] as const },
       { section: 'progress' as const, actions: ['view'] as const }
     ],
-    color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+    color: 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200',
     icon: 'Users'
   },
   viewer: {

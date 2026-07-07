@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, FileText, ExternalLink, FolderOpen, Link, Trash2, Edit, BarChart3 } from 'lucide-react';
+import { Plus, FileText, ExternalLink, FolderOpen, Link, Trash2, CreditCard as Edit, BarChart3 } from 'lucide-react';
 import { Project, ProjectDocument } from '../../types';
 import EmptyState from '../ui/EmptyState';
 import Tooltip from '../ui/Tooltip';
@@ -92,9 +92,9 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
       case 'google-sheet':
         return <FileText className="h-8 w-8 text-green-600" />;
       case 'looker-studio':
-        return <BarChart3 className="h-8 w-8 text-blue-600" />;
+        return <BarChart3 className="h-8 w-8 text-emerald-600" />;
       case 'internal-doc':
-        return <FileText className="h-8 w-8 text-purple-600" />;
+        return <FileText className="h-8 w-8 text-teal-600" />;
       default:
         return <FileText className="h-8 w-8 text-gray-600" />;
     }
@@ -107,9 +107,9 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
       case 'google-sheet':
         return 'bg-green-100 text-green-800';
       case 'looker-studio':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-emerald-100 text-emerald-800';
       case 'internal-doc':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-teal-100 text-teal-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -147,7 +147,7 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
         </div>
         <button
           onClick={() => setShowAddForm(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
         >
           <Plus className="h-4 w-4" />
           Add Document
@@ -190,9 +190,9 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
           <div className="flex items-center justify-between">
             <div>
               <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Looker Studio</p>
-              <p className="text-2xl font-bold text-blue-600">{documentsByType['looker-studio'].length}</p>
+              <p className="text-2xl font-bold text-emerald-600">{documentsByType['looker-studio'].length}</p>
             </div>
-            <BarChart3 className="h-8 w-8 text-blue-600" />
+            <BarChart3 className="h-8 w-8 text-emerald-600" />
           </div>
         </div>
         <div className={`p-6 rounded-lg shadow-sm border transition-colors ${
@@ -203,9 +203,9 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
           <div className="flex items-center justify-between">
             <div>
               <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Internal Docs</p>
-              <p className="text-2xl font-bold text-purple-600">{documentsByType['internal-doc'].length}</p>
+              <p className="text-2xl font-bold text-teal-600">{documentsByType['internal-doc'].length}</p>
             </div>
-            <FileText className="h-8 w-8 text-purple-600" />
+            <FileText className="h-8 w-8 text-teal-600" />
           </div>
         </div>
       </div>
@@ -287,9 +287,9 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
         }`}>
           <div className="text-center">
             <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 ${
-              isDarkMode ? 'bg-blue-900' : 'bg-blue-100'
+              isDarkMode ? 'bg-emerald-900' : 'bg-emerald-100'
             }`}>
-              <BarChart3 className="h-6 w-6 text-blue-600" />
+              <BarChart3 className="h-6 w-6 text-emerald-600" />
             </div>
             <h3 className={`text-lg font-semibold mb-2 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
@@ -304,8 +304,8 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
               }}
               className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover-lift border-2 border-dashed ${
                 isDarkMode 
-                  ? 'bg-blue-900/30 text-blue-400 border-blue-600 hover:bg-blue-900/50' 
-                  : 'bg-blue-50 text-blue-700 border-blue-300 hover:bg-blue-100'
+                  ? 'bg-emerald-900/30 text-emerald-400 border-emerald-600 hover:bg-emerald-900/50' 
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100'
               }`}
             >
               <Link className="h-4 w-4" />
@@ -321,9 +321,9 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
         }`}>
           <div className="text-center">
             <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 ${
-              isDarkMode ? 'bg-purple-900' : 'bg-purple-100'
+              isDarkMode ? 'bg-teal-900' : 'bg-teal-100'
             }`}>
-              <FolderOpen className="h-6 w-6 text-purple-600" />
+              <FolderOpen className="h-6 w-6 text-teal-600" />
             </div>
             <h3 className={`text-lg font-semibold mb-2 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
@@ -338,8 +338,8 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
               }}
               className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover-lift border-2 border-dashed ${
                 isDarkMode 
-                  ? 'bg-purple-900/30 text-purple-400 border-purple-600 hover:bg-purple-900/50' 
-                  : 'bg-purple-50 text-purple-700 border-purple-300 hover:bg-purple-100'
+                  ? 'bg-teal-900/30 text-teal-400 border-teal-600 hover:bg-teal-900/50' 
+                  : 'bg-teal-50 text-teal-700 border-teal-300 hover:bg-teal-100'
               }`}
             >
               <Link className="h-4 w-4" />
@@ -372,7 +372,7 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
                   required
                   value={newDocument.name}
                   onChange={(e) => setNewDocument(prev => ({ ...prev, name: e.target.value }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -387,7 +387,7 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
                 <select
                   value={newDocument.type}
                   onChange={(e) => setNewDocument(prev => ({ ...prev, type: e.target.value as ProjectDocument['type'] }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
@@ -410,7 +410,7 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
                   required
                   value={newDocument.url}
                   onChange={(e) => setNewDocument(prev => ({ ...prev, url: e.target.value }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -432,7 +432,7 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
                   type="text"
                   value={newDocument.category}
                   onChange={(e) => setNewDocument(prev => ({ ...prev, category: e.target.value }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -454,7 +454,7 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
               <textarea
                 value={newDocument.description}
                 onChange={(e) => setNewDocument(prev => ({ ...prev, description: e.target.value }))}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                   isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -477,7 +477,7 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 {editingDocument ? 'Update Document' : 'Add Document'}
               </button>
@@ -554,8 +554,8 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
                         rel="noopener noreferrer"
                         className={`p-2 rounded-lg transition-all duration-200 hover-lift ${
                           isDarkMode 
-                            ? 'text-gray-400 hover:text-blue-400 hover:bg-blue-900/30' 
-                            : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                            ? 'text-gray-400 hover:text-emerald-400 hover:bg-emerald-900/30' 
+                            : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
                         }`}
                       >
                         <ExternalLink className="h-4 w-4" />
@@ -566,8 +566,8 @@ export default function ProjectDocumentsTab({ project, onUpdate }: ProjectDocume
                         onClick={() => handleEditDocument(document)}
                         className={`p-2 rounded-lg transition-all duration-200 hover-lift ${
                           isDarkMode 
-                            ? 'text-gray-400 hover:text-blue-400 hover:bg-blue-900/30' 
-                            : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                            ? 'text-gray-400 hover:text-emerald-400 hover:bg-emerald-900/30' 
+                            : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
                         }`}
                         title="Edit document"
                       >

@@ -17,7 +17,7 @@ export default function NotificationCenter() {
       case 'success':
         return <CheckCircle className="h-5 w-5 text-green-600" />;
       default:
-        return <Info className="h-5 w-5 text-blue-600" />;
+        return <Info className="h-5 w-5 text-emerald-600" />;
     }
   };
 
@@ -73,9 +73,9 @@ export default function NotificationCenter() {
                   <button
                     onClick={markAllAsRead}
                     className={`text-sm flex items-center gap-1 transition-colors ${
-                      isDarkMode 
-                        ? 'text-blue-400 hover:text-blue-300' 
-                        : 'text-blue-600 hover:text-blue-700'
+                      isDarkMode
+                        ? 'text-emerald-400 hover:text-emerald-300'
+                        : 'text-emerald-700 hover:text-emerald-800'
                     }`}
                   >
                     <CheckCheck className="h-4 w-4" />
@@ -99,7 +99,7 @@ export default function NotificationCenter() {
                       isDarkMode ? 'border-gray-700' : 'border-gray-100'
                     } ${
                       !notification.read 
-                        ? isDarkMode ? 'bg-gray-700/50' : 'bg-blue-50' 
+                        ? isDarkMode ? 'bg-gray-700/50' : 'bg-emerald-50'
                         : isDarkMode ? 'hover:bg-gray-700/30' : 'hover:bg-gray-50'
                     }`}
                   >
@@ -131,9 +131,9 @@ export default function NotificationCenter() {
                                 <button
                                   onClick={() => markAsRead(notification.id)}
                                   className={`text-xs flex items-center gap-1 transition-colors ${
-                                    isDarkMode 
-                                      ? 'text-blue-400 hover:text-blue-300' 
-                                      : 'text-blue-600 hover:text-blue-700'
+                                    isDarkMode
+                                      ? 'text-emerald-400 hover:text-emerald-300'
+                                      : 'text-emerald-700 hover:text-emerald-800'
                                   }`}
                                 >
                                   <Check className="h-3 w-3" />

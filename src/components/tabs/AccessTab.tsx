@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Key, CheckCircle, Clock, XCircle, Edit, Trash2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Plus, Key, CheckCircle, Clock, XCircle, CreditCard as Edit, Trash2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { Project, AccessItem } from '../../types';
 import StatusBadge from '../ui/StatusBadge';
 import EmptyState from '../ui/EmptyState';
@@ -147,7 +147,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
         </div>
         <button
           onClick={() => setShowAddForm(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
         >
           <Plus className="h-4 w-4" />
           Add Access
@@ -167,9 +167,9 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
               <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{project.accessGranted.length}</p>
             </div>
             <div className={`h-12 w-12 rounded-lg flex items-center justify-center ${
-              isDarkMode ? 'bg-blue-900' : 'bg-blue-100'
+              isDarkMode ? 'bg-emerald-900' : 'bg-emerald-100'
             }`}>
-              <Key className="h-6 w-6 text-blue-600" />
+              <Key className="h-6 w-6 text-emerald-600" />
             </div>
           </div>
         </div>
@@ -236,7 +236,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                   required
                   value={newAccess.type}
                   onChange={(e) => setNewAccess(prev => ({ ...prev, type: e.target.value }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -252,7 +252,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                   type="date"
                   value={newAccess.dateGranted}
                   onChange={(e) => setNewAccess(prev => ({ ...prev, dateGranted: e.target.value }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
@@ -266,7 +266,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                 <select
                   value={newAccess.status}
                   onChange={(e) => setNewAccess(prev => ({ ...prev, status: e.target.value as AccessItem['status'] }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
@@ -288,7 +288,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                     ...prev, 
                     email: e.target.value 
                   }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -302,13 +302,13 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
             {currentUser?.role === 'admin' && (
               <div className={`p-4 rounded-lg border-2 border-dashed ${
                 isDarkMode 
-                  ? 'border-blue-600 bg-blue-900/20' 
-                  : 'border-blue-300 bg-blue-50'
+                  ? 'border-emerald-600 bg-emerald-900/20' 
+                  : 'border-emerald-300 bg-emerald-50'
               }`}>
                 <div className="flex items-center gap-2 mb-4">
-                  <Key className="h-5 w-5 text-blue-600" />
+                  <Key className="h-5 w-5 text-emerald-600" />
                   <h4 className={`text-sm font-semibold ${
-                    isDarkMode ? 'text-blue-300' : 'text-blue-800'
+                    isDarkMode ? 'text-emerald-300' : 'text-emerald-800'
                   }`}>
                     Website Credentials (Optional)
                   </h4>
@@ -328,7 +328,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                           email: e.target.value 
                         } 
                       }))}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                         isDarkMode 
                           ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -350,7 +350,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                           password: e.target.value 
                         } 
                       }))}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                         isDarkMode 
                           ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -392,7 +392,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                           email: e.target.value 
                         } 
                       }))}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                         isDarkMode 
                           ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -414,7 +414,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                           password: e.target.value 
                         } 
                       }))}
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                         isDarkMode 
                           ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -433,7 +433,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
               <textarea
                 value={newAccess.notes}
                 onChange={(e) => setNewAccess(prev => ({ ...prev, notes: e.target.value }))}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                   isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -456,7 +456,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 {editingAccess ? 'Update Access' : 'Add Access'}
               </button>
@@ -484,7 +484,7 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4 flex-1">
                   <div className={`p-2 rounded-lg ${
-                    isDarkMode ? 'bg-blue-900/50' : 'bg-blue-100'
+                    isDarkMode ? 'bg-emerald-900/50' : 'bg-emerald-100'
                   }`}>
                     {getStatusIcon(access.status)}
                   </div>
@@ -511,13 +511,13 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                         {(access.websiteCredentials?.email || access.websiteCredentials?.password) && (
                           <div className={`p-3 rounded-lg border ${
                             isDarkMode 
-                              ? 'bg-blue-900/30 border-blue-700' 
-                              : 'bg-blue-50 border-blue-200'
+                              ? 'bg-emerald-900/30 border-emerald-700'
+                              : 'bg-emerald-50 border-emerald-200'
                           }`}>
                             <div className="flex items-center gap-2 mb-2">
-                              <Lock className="h-4 w-4 text-blue-600" />
+                              <Lock className="h-4 w-4 text-emerald-600" />
                               <span className={`text-sm font-medium ${
-                                isDarkMode ? 'text-blue-300' : 'text-blue-800'
+                                isDarkMode ? 'text-emerald-300' : 'text-emerald-800'
                               }`}>
                                 Website Credentials
                               </span>
@@ -605,13 +605,13 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                         {access.email && (
                           <div className={`p-3 rounded-lg border ${
                             isDarkMode 
-                              ? 'bg-purple-900/30 border-purple-700' 
-                              : 'bg-purple-50 border-purple-200'
+                              ? 'bg-teal-900/30 border-teal-700'
+                              : 'bg-teal-50 border-teal-200'
                           }`}>
                             <div className="flex items-center gap-2 mb-2">
-                              <Mail className="h-4 w-4 text-purple-600" />
+                              <Mail className="h-4 w-4 text-teal-600" />
                               <span className={`text-sm font-medium ${
-                                isDarkMode ? 'text-purple-300' : 'text-purple-800'
+                                isDarkMode ? 'text-teal-300' : 'text-teal-800'
                               }`}>
                                 Access Email
                               </span>
@@ -652,8 +652,8 @@ export default function AccessTab({ project, onUpdate }: AccessTabProps) {
                       onClick={() => handleEditAccess(access, index)}
                       className={`p-2 rounded-lg transition-all duration-200 hover-lift ${
                         isDarkMode 
-                          ? 'text-blue-400 hover:text-blue-300 hover:bg-blue-900/30' 
-                          : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50'
+                          ? 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-900/30'
+                          : 'text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50'
                       }`}
                     >
                       <Edit className="h-4 w-4" />

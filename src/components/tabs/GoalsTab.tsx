@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Target, TrendingUp, Clock, Edit, Trash2, X, Award } from 'lucide-react';
+import { Plus, Target, TrendingUp, Clock, CreditCard as Edit, Trash2, X, Award } from 'lucide-react';
 import { Project } from '../../types';
 import StatusBadge from '../ui/StatusBadge';
 import EmptyState from '../ui/EmptyState';
@@ -180,7 +180,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
       case 'Achieved':
         return 'bg-green-100 text-green-800';
       case 'In Progress':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-teal-100 text-teal-800';
       case 'Pending':
         return 'bg-gray-100 text-gray-800';
       default:
@@ -190,7 +190,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
 
   const getProgressColor = (progress: number) => {
     if (progress >= 100) return 'bg-green-600';
-    if (progress >= 70) return 'bg-blue-600';
+    if (progress >= 70) return 'bg-emerald-600';
     if (progress >= 40) return 'bg-yellow-600';
     return 'bg-gray-400';
   };
@@ -205,7 +205,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
         </div>
         <button 
           onClick={() => setShowAddForm(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
         >
           <Plus className="h-4 w-4" />
           Add Goal
@@ -225,9 +225,9 @@ export default function GoalsTab({ project }: GoalsTabProps) {
               <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{goals.length}</p>
             </div>
             <div className={`h-12 w-12 rounded-lg flex items-center justify-center ${
-              isDarkMode ? 'bg-blue-900' : 'bg-blue-100'
+              isDarkMode ? 'bg-emerald-900' : 'bg-emerald-100'
             }`}>
-              <Target className="h-6 w-6 text-blue-600" />
+              <Target className="h-6 w-6 text-emerald-600" />
             </div>
           </div>
         </div>
@@ -239,12 +239,12 @@ export default function GoalsTab({ project }: GoalsTabProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>In Progress</p>
-              <p className="text-2xl font-bold text-blue-600">{goals.filter(g => g.status === 'In Progress').length}</p>
+              <p className="text-2xl font-bold text-emerald-600">{goals.filter(g => g.status === 'In Progress').length}</p>
             </div>
             <div className={`h-12 w-12 rounded-lg flex items-center justify-center ${
-              isDarkMode ? 'bg-blue-900' : 'bg-blue-100'
+              isDarkMode ? 'bg-emerald-900' : 'bg-emerald-100'
             }`}>
-              <Clock className="h-6 w-6 text-blue-600" />
+              <Clock className="h-6 w-6 text-emerald-600" />
             </div>
           </div>
         </div>
@@ -302,7 +302,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
                 required
                 value={newGoal.title}
                 onChange={(e) => setNewGoal(prev => ({ ...prev, title: e.target.value }))}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                   isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -319,7 +319,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
                 required
                 value={newGoal.description}
                 onChange={(e) => setNewGoal(prev => ({ ...prev, description: e.target.value }))}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                   isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -340,8 +340,8 @@ export default function GoalsTab({ project }: GoalsTabProps) {
                   onClick={addBulletPoint}
                  className={`flex items-center gap-1 text-sm font-medium transition-colors ${
                    isDarkMode 
-                     ? 'text-blue-400 hover:text-blue-300' 
-                     : 'text-blue-600 hover:text-blue-700'
+                     ? 'text-emerald-400 hover:text-emerald-300' 
+                     : 'text-emerald-600 hover:text-emerald-700'
                  }`}
                 >
                   <Plus className="h-4 w-4" />
@@ -357,7 +357,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
                       type="text"
                       value={point}
                       onChange={(e) => updateBulletPoint(index, e.target.value)}
-                      className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                         isDarkMode 
                           ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -391,7 +391,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
                   type="text"
                   value={newGoal.timeline}
                   onChange={(e) => setNewGoal(prev => ({ ...prev, timeline: e.target.value }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -406,7 +406,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
                 <select
                   value={newGoal.status}
                   onChange={(e) => setNewGoal(prev => ({ ...prev, status: e.target.value as Goal['status'] }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
@@ -427,7 +427,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
                   max="100"
                   value={newGoal.progress}
                   onChange={(e) => setNewGoal(prev => ({ ...prev, progress: parseInt(e.target.value) || 0 }))}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-colors ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white' 
                       : 'bg-white border-gray-300 text-gray-900'
@@ -452,7 +452,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 {editingGoal ? 'Update Goal' : 'Add Goal'}
               </button>
@@ -498,7 +498,7 @@ export default function GoalsTab({ project }: GoalsTabProps) {
                           <li key={index} className={`flex items-start gap-2 ${
                             isDarkMode ? 'text-gray-300' : 'text-gray-700'
                           }`}>
-                            <span className="text-blue-600 mt-1">•</span>
+                            <span className="text-emerald-600 mt-1">•</span>
                             <span className="text-sm">{point}</span>
                           </li>
                         ))}
@@ -531,8 +531,8 @@ export default function GoalsTab({ project }: GoalsTabProps) {
                     onClick={() => handleEditGoal(goal)}
                     className={`p-2 rounded-lg transition-all duration-200 hover-lift ${
                       isDarkMode 
-                        ? 'text-gray-400 hover:text-blue-400 hover:bg-blue-900/30' 
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                        ? 'text-gray-400 hover:text-emerald-400 hover:bg-emerald-900/30'
+                        : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
                     }`}
                     title="Edit goal"
                   >
