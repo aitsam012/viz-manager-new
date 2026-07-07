@@ -23,36 +23,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Check for existing Supabase session on mount
   useEffect(() => {
-    const checkExistingSession = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (session?.user) {
-          const userData = await AuthService.getCurrentUser();
-          setUser(userData);
-        }
-      } catch (error) {
-        console.error('Error checking existing session:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    let initialized = false;
 
-    checkExistingSession();
-
-    // Listen for auth changes
+    // Listen for auth changes — fires synchronously with INITIAL_SESSION on mount
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
+      if (event === 'INITIAL_SESSION') {
+        try {
+          if (session?.user) {
+            const userData = await AuthService.getCurrentUser();
+            setUser(userData);
+          }
+        } catch (error) {
+          console.error('Error getting user data on init:', error);
+        } finally {
+          initialized = true;
+          setIsLoading(false);
+        }
+      } else if (event === 'SIGNED_IN' && session?.user) {
         try {
           const userData = await AuthService.getCurrentUser();
           setUser(userData);
         } catch (error) {
           console.error('Error getting user data:', error);
         }
+        if (!initialized) {
+          initialized = true;
+          setIsLoading(false);
+        }
       } else if (event === 'SIGNED_OUT') {
         setUser(null);
+        if (!initialized) {
+          initialized = true;
+          setIsLoading(false);
+        }
       }
-      setIsLoading(false);
     });
 
     return () => subscription.unsubscribe();
