@@ -20,12 +20,30 @@ export class AuthService {
   static async signIn(email: string) {
     const normalizedEmail = email.toLowerCase().trim();
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: normalizedEmail,
-      password: 'password'
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/email-signin`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: anonKey,
+        Authorization: `Bearer ${anonKey}`,
+      },
+      body: JSON.stringify({ email: normalizedEmail }),
     });
 
-    if (error) throw new Error('No active account found for that email');
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(payload?.error || 'Unable to sign in');
+    }
+
+    const { error: verifyError, data } = await supabase.auth.verifyOtp({
+      type: 'magiclink',
+      token_hash: payload.token_hash,
+    });
+
+    if (verifyError) throw verifyError;
 
     if (data.user) {
       await supabase
