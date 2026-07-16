@@ -28,7 +28,7 @@ export interface Permission {
 export interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string) => Promise<boolean>;
   logout: () => void;
   hasPermission: (section: string, action: string) => boolean;
   canAccessProject: (projectId: string) => boolean;

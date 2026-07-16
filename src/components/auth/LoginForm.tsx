@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Lock, Mail, LogIn, AlertCircle, Sparkles } from 'lucide-react';
+import { Mail, LogIn, AlertCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -7,8 +7,7 @@ export default function LoginForm() {
   const { login } = useAuth();
   const { isDarkMode } = useTheme();
   const [localIsLoading, setLocalIsLoading] = useState(false);
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -16,16 +15,16 @@ export default function LoginForm() {
     e.preventDefault();
     setError('');
 
-    if (!formData.email || !formData.password) {
-      setError('Please fill in all fields');
+    if (!email) {
+      setError('Please enter your email');
       return;
     }
 
     setLocalIsLoading(true);
-    const success = await login(formData.email, formData.password);
+    const success = await login(email);
 
     if (!success) {
-      setError('Invalid email or password');
+      setError('No active account found for that email');
     }
     setLocalIsLoading(false);
   };
@@ -60,6 +59,9 @@ export default function LoginForm() {
             <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               Sign in to VIZ Manager to continue.
             </p>
+            <p className={`text-xs mt-2 ${isDarkMode ? 'text-amber-300' : 'text-amber-600'}`}>
+              Password temporarily disabled — sign in with email only.
+            </p>
           </div>
 
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -93,47 +95,11 @@ export default function LoginForm() {
                   type="email"
                   autoComplete="email"
                   required
-                  value={formData.email}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className={inputBase}
                   placeholder="you@example.com"
                 />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
-              >
-                Password
-              </label>
-              <div className="relative">
-                <Lock
-                  className={`absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 ${
-                    isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                  }`}
-                />
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  required
-                  value={formData.password}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
-                  className={`${inputBase} pr-12`}
-                  placeholder="Enter your password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className={`absolute right-4 top-1/2 -translate-y-1/2 ${
-                    isDarkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'
-                  }`}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
               </div>
             </div>
 

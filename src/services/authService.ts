@@ -17,15 +17,16 @@ export class AuthService {
     return data;
   }
 
-  static async signIn(email: string, password: string) {
+  static async signIn(email: string) {
+    const normalizedEmail = email.toLowerCase().trim();
+
     const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
+      email: normalizedEmail,
+      password: 'password'
     });
 
-    if (error) throw error;
+    if (error) throw new Error('No active account found for that email');
 
-    // Update last login
     if (data.user) {
       await supabase
         .from('users')
@@ -43,17 +44,17 @@ export class AuthService {
 
   static async getCurrentUser(): Promise<User | null> {
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (!user) return null;
 
-    // First get user data
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('*')
       .eq('id', user.id)
-      .single();
+      .maybeSingle();
 
     if (userError) throw userError;
+    if (!userData) return null;
 
     // Then get project assignments separately to avoid recursion
     const { data: assignments, error: assignmentsError } = await supabase

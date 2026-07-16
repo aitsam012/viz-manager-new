@@ -21,11 +21,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check for existing Supabase session on mount
   useEffect(() => {
     let mounted = true;
 
-    // Initial session check
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!mounted) return;
       if (session?.user) {
@@ -45,7 +43,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (mounted) setIsLoading(false);
     });
 
-    // Listen for auth changes (avoid awaiting inside — causes deadlocks)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
         setTimeout(() => {
@@ -66,12 +63,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string): Promise<boolean> => {
     try {
-      const data = await AuthService.signIn(email, password);
+      await AuthService.signIn(email);
       const userData = await AuthService.getCurrentUser();
       setUser(userData);
-      return true;
+      return !!userData;
     } catch (error) {
       console.error('Login error:', error);
       return false;
@@ -85,11 +82,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const hasPermission = (section: string, action: string): boolean => {
     if (!user || !user.isActive) return false;
-    
-    // Admin has all permissions
     if (user.role === 'admin') return true;
-    
-    // Check specific permissions based on role
     const rolePermissions = PERMISSION_LEVELS[user.role].permissions;
     return rolePermissions.some(permission => {
       const hasSection = permission.section === 'all' || permission.section === section;
@@ -100,32 +93,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const canAccessProject = (projectId: string): boolean => {
     if (!user || !user.isActive) return false;
-    
-    // Admin can access all projects
     if (user.role === 'admin' || user.hasAllProjects) return true;
-    
-    // Check if user has specific project assignment
-    return user.projectAssignments.some(assignment => 
+    return user.projectAssignments.some(assignment =>
       assignment.projectId === projectId && assignment.permissions.canView
     );
   };
 
   const canEditProjectSection = (projectId: string, section: string): boolean => {
     if (!user || !user.isActive) return false;
-    
-    // Admin can edit everything
     if (user.role === 'admin') return true;
-    
-    // Check project-specific permissions
     const projectAssignment = user.projectAssignments.find(
       assignment => assignment.projectId === projectId
     );
-    
     if (!projectAssignment || !projectAssignment.permissions.canEdit) {
       return false;
     }
-    
-    // Check if user can edit this specific section
     return projectAssignment.permissions.editableSections.includes(section as any);
   };
 
